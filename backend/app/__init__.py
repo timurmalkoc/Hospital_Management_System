@@ -22,4 +22,7 @@ app.register_blueprint(user)
 from app.blueprints.staff import staff
 app.register_blueprint(staff)
 
+from app.blueprints.appointment import appointment
+app.register_blueprint(appointment)
+
 from . import models, routes

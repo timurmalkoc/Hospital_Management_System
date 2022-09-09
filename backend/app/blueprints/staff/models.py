@@ -4,12 +4,12 @@ from app.models import Personal
 # ======================================================# staff #====================================================== #
 
 class Staff(db.Model):
-    staff_id = db.Column(db.Integer, primary_key = True)
-    department = db.Column(db.String(50), nullable=False)
-    role = db.Column(db.String(50), nullable=False)
-    started_date = db.Column(db.DateTime(), nullable=False)
-    personal_info_id = db.Column(db.Integer, db.ForeignKey('personal.personal_info_id'), nullable=False)
-    qulifications = db.relationship('Qulifications', backref='owner', lazy=True)
+    staff_id =          db.Column(db.Integer, primary_key = True)
+    department =        db.Column(db.String(50), nullable=False)
+    role =              db.Column(db.String(50), nullable=False)
+    started_date =      db.Column(db.DateTime(), nullable=False)
+    personal_info_id =  db.Column(db.Integer, db.ForeignKey('personal.personal_info_id'), nullable=False)
+    qulifications =     db.relationship('Qulifications', backref='owner', lazy=True)
 
     def __init__(self):
         super().__init__()
@@ -43,11 +43,11 @@ class Staff(db.Model):
 # ======================================================# qualification #====================================================== #
 
 class Qualificaiton(db.Model):
-    qualificaiton_id = db.Column(db.Integer, primary_key = True)
-    qualificaiton_type = db.Column(db.String(50), nullable=False)
-    issued_date = db.Column(db.DateTime(), nullable=True)
-    expire_date = db.Column(db.DateTime(), nullable=True)
-    staff_id = db.Column(db.Integer, db.ForeignKey('staff.staff_id'), nullable=False)
+    qualificaiton_id =      db.Column(db.Integer, primary_key = True)
+    qualificaiton_type =    db.Column(db.String(50), nullable=False)
+    issued_date =           db.Column(db.DateTime(), nullable=True)
+    expire_date =           db.Column(db.DateTime(), nullable=True)
+    staff_id =              db.Column(db.Integer, db.ForeignKey('staff.staff_id'), nullable=False)
 
     def __init__(self):
         super().__init__()

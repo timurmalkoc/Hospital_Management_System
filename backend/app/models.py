@@ -23,7 +23,7 @@ class Personal(db.Model):
     gender =            db.Column(db.String(5), nullable = True)
     birthday =          db.Column(db.DateTime, nullable = False)
     created_date =      db.Column(db.DateTime, nullable = False, default=datetime.utcnow)
-    active =            db.Column(db.Boolean, nullable=True, default=True)
+    active =            db.Column(db.Boolean, nullable=True, default=False)
     profile_img =       db.Column(db.String(255), nullable=True)
     token =             db.Column(db.String(32), index=True, unique=True)
     token_expiration =  db.Column(db.DateTime)

@@ -1,7 +1,6 @@
 from app import db
 from app.models import Personal
 
-
 # ======================================================# patient #====================================================== #
 
 class User(db.Model):

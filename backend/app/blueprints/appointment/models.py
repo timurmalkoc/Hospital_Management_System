@@ -11,8 +11,8 @@ class Appointment(db.Model):
     doctor_id =         db.Column(db.Integer, db.ForeignKey('staff.staff_id'), nullable=False)
     patient_id =        db.Column(db.Integer, db.ForeignKey('user.patient_id'), nullable=False)
 
-    def __init__(self, **Kwargs):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         db.session.add(self)
         db.session.commit()
 

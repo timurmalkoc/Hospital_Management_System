@@ -1,6 +1,8 @@
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from app.models import Personal
 from datetime import datetime
+from app.blueprints.user.models import User
+from app.blueprints.staff.models import Staff
 
 basic_auth = HTTPBasicAuth()
 token_auth = HTTPTokenAuth()
@@ -16,3 +18,13 @@ def verify(token):
     user = Personal.query.filter_by(token=token).first()
     if user and user.token_expiration > datetime.utcnow():
         return user
+
+
+def user_type(token):
+    user = Personal.query.filter_by(token=token).first()
+    user_type = ''
+    if User.query.filter(personal_info_id=user.personal_info_id).all():
+        user_type = 'patient'
+    elif Staff.query.filter(personal_info_id=user.personal_info_id).all():
+        user_type = Staff.query.filter(personal_info_id=user.personal_info_id).first().role
+    return user_type

@@ -4,14 +4,14 @@ from app.models import Personal
 # ======================================================# patient #====================================================== #
 
 class User(db.Model):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        db.session.add(self)
+        db.session.commit()
     patient_id =        db.Column(db.Integer, primary_key = True)
     personal_info_id =  db.Column(db.Integer, db.ForeignKey('personal.personal_info_id'), nullable=False)
     insurance_id =      db.Column(db.Integer, db.ForeignKey('insurance.insurance_id'), nullable=True)
 
-    def __init__(self, **Kwargs):
-        super().__init__()
-        db.session.add(self)
-        db.session.commit()
 
     def __repr__(self):
         return f"<User {self.patient_id}>"
@@ -30,8 +30,8 @@ class Insurance(db.Model):
     name =          db.Column(db.String(100), nullable=False)
     phone =         db.Column(db.String(15), nullable=False)
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         db.session.add(self)
         db.session.commit()
 
@@ -70,8 +70,8 @@ class Invoice(db.Model):
     prepared_date = db.Column(db.DateTime)
 
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
         db.session.add(self)
         db.session.commit()
 

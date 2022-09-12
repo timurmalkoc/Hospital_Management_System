@@ -9,10 +9,9 @@ class Staff(db.Model):
     role =              db.Column(db.String(50), nullable=False)
     started_date =      db.Column(db.DateTime(), nullable=False)
     personal_info_id =  db.Column(db.Integer, db.ForeignKey('personal.personal_info_id'), nullable=False)
-    qulifications =     db.relationship('Qulifications', backref='owner', lazy=True)
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         db.session.add(self)
         db.session.commit()
 
@@ -49,8 +48,8 @@ class Qualificaiton(db.Model):
     expire_date =           db.Column(db.DateTime(), nullable=True)
     staff_id =              db.Column(db.Integer, db.ForeignKey('staff.staff_id'), nullable=False)
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         db.session.add(self)
         db.session.commit()
 

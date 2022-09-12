@@ -6,19 +6,22 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 
 class Personal(db.Model):
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.set_passowrd(kwargs['password'])
+        self.set_password(kwargs['password'])
         db.session.add(self)
         db.session.commit()
     personal_info_id =  db.Column(db.Integer, primary_key=True)
     email =             db.Column(db.String(50), nullable=False, unique = True)
+    username =          db.Column(db.String(50), nullable=False, unique = True)
+    password =          db.Column(db.String(256), nullable=False)
     first_name =        db.Column(db.String(50), nullable=False)
     middle_name =       db.Column(db.String(50), nullable=True)
     last_name =         db.Column(db.String(50), nullable=False)
     phone =             db.Column(db.String(10), nullable=True)
     street =            db.Column(db.String(50), nullable = False)
     city =              db.Column(db.String(50), nullable = False)
+    state =             db.Column(db.String(50), nullable = False)
     zip_code =          db.Column(db.String(10), nullable = False)
     gender =            db.Column(db.String(5), nullable = True)
     birthday =          db.Column(db.DateTime, nullable = False)

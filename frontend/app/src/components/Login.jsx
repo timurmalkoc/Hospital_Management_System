@@ -17,10 +17,10 @@ import { useNavigate } from 'react-router-dom';
                 method: 'POST',
                 headers: myHeaders
             })
+            
 
             if (response.ok){
                 let data = await response.json()
-
                 localStorage.setItem('token', data.token)
                 localStorage.setItem('expire', data.token_expiration)
                 localStorage.setItem('user_type', data.user_type)
@@ -28,14 +28,17 @@ import { useNavigate } from 'react-router-dom';
                 localStorage.setItem('profile_img', data.profile_img)
                 props.login()
                 navigate('/dashboard')
-            }else
-                props.flashMessage('Incorrect credential !', 'danger');
-            
+            }else{
+                console.log(response.status)
+                if(response.status == 400){
+                let data = await response.json()
+                props.flashMessage(data.error, 'danger');}
+                else
+                    props.flashMessage('Incorrect credential !', 'danger');
+            }
         }
         
-
-
-        
+       
         return (
             <>
                 <header className="w3-display-container w3-content w3-card " style={{maxWidth:"1500px"}}>
@@ -55,7 +58,7 @@ import { useNavigate } from 'react-router-dom';
                             <input className="w3-input w3-card w3-text-black" type="password" placeholder="Password" name="password"/>
                         </div>
                         <div className="w3-margin">
-                            <a href="/signup" className="link-dark"><b>Click to Register</b></a>
+                            <a href="/signup" className="link-dark"><b>Click to Create Patient Account</b></a>
                         </div>
                         <div className="w3-margin">
                         <button className="w3-button w3-hover-blue w3-card" type="submit"><b>Login</b></button>

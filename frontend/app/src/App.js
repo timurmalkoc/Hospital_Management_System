@@ -4,8 +4,10 @@ import AlertMessage from './components/AlertMessage';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Signup from './components/Singup';
-import Dashboard from './components/Dashboard';
-import UserPage from './components/UserPage';
+import Dashboard from './components/PatientDashboard';
+import SideBar from './components/SideBar';
+import ViewAccount from './components/ViewAccount';
+import Footer from './components/Footer'
 
 function App(props) {
   let navigate = useNavigate()
@@ -42,13 +44,14 @@ function App(props) {
     <>
     <Navbar logout={logout} loggedIn={loggedIn}/>
     {message ? <AlertMessage message={message} category={category} flashMessage={flashMessage} /> : null}
-    {loggedIn ? <UserPage/> : null}
+    {loggedIn ? <SideBar/> : null}
       <Routes>
         <Route path='/' element={<Login flashMessage={flashMessage} base_url={base_url} login={login}/>}/>
         <Route path='/signup' element={<Signup flashMessage={flashMessage} base_url={base_url}/>}/>
         <Route path='/dashboard' element={<Dashboard flashMessage={flashMessage} base_url={base_url}/>}/>
-
+        <Route path='/viewaccount' element={<ViewAccount base_url={base_url} loggedIn={loggedIn} flashMessage={flashMessage}/>}/>
       </Routes>
+      <Footer/>
     </>
   );
 }

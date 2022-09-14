@@ -89,3 +89,7 @@ class Personal(db.Model):
     def activate(self):
         self.active = True
         db.session.commit()
+
+    def deactivate(self):
+        self.active = False
+        db.session.commit()

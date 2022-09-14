@@ -6,6 +6,7 @@ export default function ViewAccount(props){
     const [data, setData] = useState([])
         if(!props.loggedIn)
             navigate('/')
+        // Loding user info ==============
         useEffect(() => {
 
             let myHeaders = new Headers()
@@ -18,9 +19,27 @@ export default function ViewAccount(props){
             })
             .then(res => res.json())
             .then(user => setData(user))
-            .catch(err =>
+            .catch(() =>
                 props.flashMessage('Encountered an issue, Please try again !', 'danger'))
         }, [])
+
+        // Freeze user account ============
+
+        const freeze = async () => {
+            let myHeaders = new Headers()
+
+            myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem('token'))
+            myHeaders.append('Content-Type', 'application/json');
+
+            await fetch(`${props.base_url}/freeze`, {
+                method:'PUT',
+                headers:myHeaders
+            })
+            .then(res => res.json())
+            .catch(()=> props.flashMessage("Fail action", 'danger'))
+            props.flashMessage('You have successfully freeze your account. To reactivate your account, Please contact us', 'success')
+            props.logout()
+        }
 
     return(
         <>
@@ -117,9 +136,25 @@ export default function ViewAccount(props){
             </div>
             <div className="d-flex justify-content-center mb-2">
                 <a onClick={() => navigate(`/updateprofile/${data.personal_info_id}`)} className="btn btn-outline-success ms-1">Edit</a>
-                <button type="button" className="btn btn-outline-danger ms-2">Suspend</button>
-            </div>
-            
+                {localStorage.getItem('user_type') == 'patient' || localStorage.getItem('user_type') == 'admin' ?
+                <button type="button"  className="btn btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Freeze</button>  :  null }
+                {/* =================== Modal ============== */}
+                <div className="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                  <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                          <h5 className="modal-title" id="deleteModalLabel">Freeze Account</h5>
+                          <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">Are you sure to freeze ?</div>
+                        <div className="modal-footer">
+                          <button type="button"  onClick={()=> navigate('/viewaccount')} className="btn btn-primary" data-bs-dismiss="modal">Freeze</button>
+                          <a onClick={freeze} className="btn btn-danger" data-bs-dismiss="modal">Delete</a>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+            </div>           
         
         </>
     )

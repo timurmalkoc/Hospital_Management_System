@@ -3,7 +3,6 @@ from flask import jsonify, request
 from app.models import Personal
 from app.blueprints.user.models import User
 
-
 @user.route('/signup', methods=['POST'])
 def user_signup():
     if not request.is_json:
@@ -30,5 +29,3 @@ def user_signup():
     User(personal_info_id=personal.personal_info_id)
 
     return jsonify({'success':'New user is created successfully !'}), 201
-
-

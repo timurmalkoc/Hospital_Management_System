@@ -8,20 +8,22 @@ export default function SideBar(Props){
     // Setting user links by roles
     const links = {
         patient: {
-            Overview:{link:'/dashboard', className:"fa fa-eye fa-fw"},
-            Settings:{link:'/viewaccount', className:"fa fa-cog fa-fw"}
+            Overview:{link:'/dashboard', className:"fa fa-eye fa-fw", link_text:"Overview"},
+            Settings:{link:'/viewaccount', className:"fa fa-cog fa-fw", link_text:"Settings"}
         },
         admin: {
-            Overview:{link:'/admindashboard', className:"fa fa-eye fa-fw"},
-            Newuser:{link:'/newusers', className:"fa fa-users fa-fw"},
-            Settings:{link:'/viewaccount', className:"fa fa-cog fa-fw"}
+            Overview:{link:'/admindashboard', className:"fa fa-eye fa-fw", link_text:"Overview"},
+            Newuser:{link:'/newusers', className:"fa fa-user fa-fw", link_text:"Activate Users"},
+            Current:{link:'/activeusers', className:"fa fa-users fa-fw", link_text:"Current Users"},
+            AddUser:{link:'/addnewuser', className:"fa fa-user-plus fa-fw", link_text:"Add New Staff"},
+            Settings:{link:'/viewaccount', className:"fa fa-cog fa-fw", link_text:"Settings"}
         }
     }
     
     // populating sidebar links
     let role = links[localStorage.getItem('user_type')]
     for(const item of Object.keys(role)){
-        linkList.push(<a href={role[item]["link"]} key={role[item]["link"]} className="w3-bar-item w3-button w3-padding"><i className={role[item]["className"]}></i> {item}</a>)
+        linkList.push(<a href={role[item]["link"]} key={role[item]["link"]} className="w3-bar-item w3-button w3-padding"><i className={role[item]["className"]}></i> {role[item]["link_text"]}</a>)
         }
 
     const close = () => {

@@ -3,6 +3,7 @@ from app.models import Personal
 from datetime import datetime
 from app.blueprints.user.models import User
 from app.blueprints.staff.models import Staff
+from flask import jsonify
 
 basic_auth = HTTPBasicAuth()
 token_auth = HTTPTokenAuth()
@@ -20,11 +21,11 @@ def verify(token):
         return user
 
 
-def user_type(token):
+def get_user_type(token):
     user = Personal.query.filter_by(token=token).first()
     user_type = ''
-    if User.query.filter(personal_info_id=user.personal_info_id).all():
+    if user and User.query.filter(User.personal_info_id==user.personal_info_id).all():
         user_type = 'patient'
-    elif Staff.query.filter(personal_info_id=user.personal_info_id).all():
-        user_type = Staff.query.filter(personal_info_id=user.personal_info_id).first().role
+    elif user and Staff.query.filter(Staff.personal_info_id==user.personal_info_id).all():
+        user_type = Staff.query.filter(Staff.personal_info_id==user.personal_info_id).first().role
     return user_type

@@ -2,6 +2,7 @@ import os
 import base64
 from datetime import datetime, timedelta
 from enum import unique
+from tkinter.tix import Tree
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 
@@ -34,6 +35,7 @@ class Personal(db.Model):
     def to_dict(self):
         return {
             'personal_info_id': self.personal_info_id,
+            'user_name': self.username,
             'email': self.email,
             'first_name': self.first_name,
             'middle_name': self.middle_name,
@@ -41,6 +43,7 @@ class Personal(db.Model):
             'phone': self.phone,
             'street': self.street,
             'city': self.city,
+            'state': self.state,
             'zip_code': self.zip_code,
             'gender': self.gender,
             'birthday': self.birthday,
@@ -82,3 +85,7 @@ class Personal(db.Model):
     def revoke_token(self):
         self.token_expiration = datetime.utcnow() - timedelta(seconds=1)
         db.session.commit()   
+
+    def activate(self):
+        self.active = True
+        db.session.commit()

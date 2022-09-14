@@ -24,7 +24,7 @@ export default function ViewAccount(props){
 
     return(
         <>
-            <div className="d-flex justify-content-start col-lg-11 me-4" style={{marginLeft:"310px", marginTop:"60px"}}>
+            <div className="d-flex justify-content-start col-lg-11 me-4 w3-row-padding" style={{marginLeft:"310px", marginTop:"60px"}}>
 
                 <div className="card mb-4 me-4 col-lg-8">
                     <div className="card-body">
@@ -116,8 +116,8 @@ export default function ViewAccount(props){
                 </div>
             </div>
             <div className="d-flex justify-content-center mb-2">
-                <button type="button" className="btn btn-outline-success ms-1">Edit</button>
-                <button type="button" className="btn btn-outline-danger ms-1">Suspend</button>
+                <a onClick={() => navigate(`/updateprofile/${data.personal_info_id}`)} className="btn btn-outline-success ms-1">Edit</a>
+                <button type="button" className="btn btn-outline-danger ms-2">Suspend</button>
             </div>
             
         

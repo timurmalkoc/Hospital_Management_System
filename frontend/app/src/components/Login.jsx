@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
     export default function Login(props) {
         let navigate = useNavigate()
+        useEffect(() => {
+            if(props.loggedIn)
+                navigate('/viewaccount')
+        }, [props.loggedIn])
+        
+
         // =========================================== User Login =========================================
         const login = async e =>{
             e.preventDefault()
@@ -27,7 +33,10 @@ import { useNavigate } from 'react-router-dom';
                 localStorage.setItem('username', data.username)
                 localStorage.setItem('profile_img', data.profile_img)
                 props.login()
+                if(data.user_type == 'patient')
                 navigate('/dashboard')
+                else if(data.user_type == 'admin')
+                navigate('/admindashboard')
             }else{
                 console.log(response.status)
                 if(response.status == 400){

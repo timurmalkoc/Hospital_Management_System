@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
     export default function Signup(props) {
 
         let navigate = useNavigate()
-        
+
+        useEffect(() => {
+            if(props.loggedIn)
+                navigate('/viewaccount')
+        }, [props.loggedIn])
+
         const handleSubmit = async e =>{
             e.preventDefault();
 

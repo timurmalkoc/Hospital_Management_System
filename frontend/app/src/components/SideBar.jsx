@@ -8,27 +8,21 @@ export default function SideBar(Props){
     // Setting user links by roles
     const links = {
         patient: {
-            Overview:{link:'/dashboard', class:"fa fa-eye fa-fw"},
-            Settings:{link:'/viewaccount', class:"fa fa-cog fa-fw"}
-        }  
+            Overview:{link:'/dashboard', className:"fa fa-eye fa-fw"},
+            Settings:{link:'/viewaccount', className:"fa fa-cog fa-fw"}
+        },
+        admin: {
+            Overview:{link:'/admindashboard', className:"fa fa-eye fa-fw"},
+            Newuser:{link:'/newusers', className:"fa fa-users fa-fw"},
+            Settings:{link:'/viewaccount', className:"fa fa-cog fa-fw"}
+        }
     }
     
     // populating sidebar links
     let role = links[localStorage.getItem('user_type')]
     for(const item of Object.keys(role)){
-        linkList.push(<a href={role[item]["link"]} className="w3-bar-item w3-button w3-padding"><i className={role[item]["class"]}></i> {item}</a>)
+        linkList.push(<a href={role[item]["link"]} key={role[item]["link"]} className="w3-bar-item w3-button w3-padding"><i className={role[item]["className"]}></i> {item}</a>)
         }
-
-    // Close the sidebar with the close button
-    const open = () => {
-    if(sidebar == 'block'){
-            setSideBar('none')
-            setOverlay('none')
-        } else{
-            setSideBar('block')
-            setOverlay('block')
-        }
-    }
 
     const close = () => {
         setSideBar('none')
@@ -56,6 +50,7 @@ export default function SideBar(Props){
                     <h5>Dashboard</h5>
                 </div>
                 <div className="w3-bar-block">
+                <a className="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onClick={close} title="close menu"><i className="fa fa-remove fa-fw"></i>  Close Menu</a>
                     {linkList}
                 </div>
             </nav>

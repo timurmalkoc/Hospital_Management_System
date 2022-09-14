@@ -25,7 +25,7 @@ class Staff(db.Model):
             'role': self.role,
             'started_date': self.started_date,
             'personal_info_id': self.personal_info_id,
-            'personal': Personal.query.get(self.personal_info_id).to_dict()
+            'personal': Personal.query.filter(Personal.personal_info_id==self.personal_info_id).first().to_dict()
         }
 
     def delete(self):

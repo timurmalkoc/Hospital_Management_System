@@ -43,7 +43,7 @@ def update_person_info(person_id):
 @token_auth.login_required
 def new_users():
     user_type = get_user_type(token_auth.current_user().token)
-    if user_type == 'admin':
+    if user_type == 'admin' or user_type == 'Admin':
         users = Personal.query.filter(Personal.active==False).all()
         return jsonify([user.to_dict() for x,user in enumerate(users)]),200
     return jsonify({'error': 'You do not have permission to this action'}), 403
@@ -53,7 +53,7 @@ def new_users():
 @token_auth.login_required
 def active_users():
     user_type = get_user_type(token_auth.current_user().token)
-    if user_type == 'admin':
+    if user_type == 'admin' or user_type == 'Admin':
         users = Personal.query.filter(Personal.active==True).all()
         return jsonify([user.to_dict() for x,user in enumerate(users)]),200
     return jsonify({'error': 'You do not have permission to this action'}), 403
@@ -63,7 +63,7 @@ def active_users():
 @token_auth.login_required
 def activate_user_accout(user_id):
     user_type = get_user_type(token_auth.current_user().token)
-    if user_type == 'admin':
+    if user_type == 'admin' or user_type == 'Admin':
         person = Personal.query.filter(Personal.personal_info_id==user_id).first()
         person.activate()
         return jsonify({'success': 'Person account has been activated'}), 200    
@@ -74,7 +74,7 @@ def activate_user_accout(user_id):
 @token_auth.login_required
 def deactivate_user_accout(user_id):
     user_type = get_user_type(token_auth.current_user().token)
-    if user_type == 'admin':
+    if user_type == 'admin' or user_type == 'Admin':
         person = Personal.query.filter(Personal.personal_info_id==user_id).first()
         person.deactivate()
         return jsonify({'success': 'Person account has been deactivated'}), 200    
@@ -85,7 +85,7 @@ def deactivate_user_accout(user_id):
 @token_auth.login_required
 def new_staff():
     user_type = get_user_type(token_auth.current_user().token)
-    if user_type != 'admin':
+    if user_type != 'admin' or user_type == 'Admin':
         return jsonify({'error': 'You do not have permission to this action'}), 403
 
     if not request.is_json:
@@ -111,3 +111,13 @@ def new_staff():
     Staff(personal_info_id=personal.personal_info_id, department=data['department'], role=data['role'], started_date=data['started_date'])
 
     return jsonify({'success':'New user is created successfully !'}), 201
+
+# staff list
+@app.route('/stafflist')
+@token_auth.login_required
+def staff_list():
+    user_type = get_user_type(token_auth.current_user().token)
+    if user_type == 'admin' or user_type == 'Admin':
+        staff = Staff.query.all()
+        return jsonify([s.to_dict() for s in staff]),200
+    return jsonify({'error': 'You do not have permission to this action'}), 403

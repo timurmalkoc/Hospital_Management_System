@@ -29,7 +29,7 @@ import { useNavigate } from 'react-router-dom';
                 let data = await response.json()
                 localStorage.setItem('token', data.token)
                 localStorage.setItem('expire', data.token_expiration)
-                localStorage.setItem('user_type', data.user_type)
+                localStorage.setItem('user_type', data.user_type.toLowerCase())
                 localStorage.setItem('username', data.username)
                 localStorage.setItem('profile_img', data.profile_img)
                 props.login()

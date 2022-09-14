@@ -36,8 +36,8 @@ import { useNavigate } from 'react-router-dom'
                     gender:     e.target.gender.value,
                     birthday:   e.target.birthday.value,
                     profile_img:e.target.profileimg.value,
-                    role:       e.target.department.value,
-                    department: e.target.role.value,
+                    role:       e.target.role.value,
+                    department: e.target.department.value,
                     started_date:e.target.starteddate.value
                 })
 

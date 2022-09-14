@@ -16,6 +16,7 @@ export default function SideBar(Props){
             Newuser:{link:'/newusers', className:"fa fa-user fa-fw", link_text:"Activate Users"},
             Current:{link:'/activeusers', className:"fa fa-users fa-fw", link_text:"Current Users"},
             AddUser:{link:'/addnewuser', className:"fa fa-user-plus fa-fw", link_text:"Add New Staff"},
+            Stafflist:{link:'/stafflist', className:"fa fa-user-plus fa-fw", link_text:"Saff List"},
             Settings:{link:'/viewaccount', className:"fa fa-cog fa-fw", link_text:"Settings"}
         }
     }

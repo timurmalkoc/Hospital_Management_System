@@ -13,6 +13,7 @@ import AdminDashboard from './components/AdminDashboard';
 import NewUsers from './components/NewUsers';
 import ActiveUsers from './components/ActiveUsers';
 import AddNewUser from './components/AddNewUser';
+import StaffList from './components/StaffList';
 
 function App(props) {
   let navigate = useNavigate()
@@ -60,6 +61,7 @@ function App(props) {
         <Route path='/newusers' element={<NewUsers base_url={base_url} loggedIn={loggedIn} flashMessage={flashMessage}/>}/>
         <Route path='/activeusers' element={<ActiveUsers base_url={base_url} loggedIn={loggedIn} flashMessage={flashMessage}/>}/>
         <Route path='/addnewuser' element={<AddNewUser base_url={base_url} loggedIn={loggedIn} flashMessage={flashMessage}/>}/>
+        <Route path='/stafflist' element={<StaffList base_url={base_url} loggedIn={loggedIn} flashMessage={flashMessage}/>}/>
       </Routes>
       <Footer/>
     </>

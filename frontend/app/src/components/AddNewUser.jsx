@@ -174,7 +174,7 @@ import { useNavigate } from 'react-router-dom'
                             </div>
                             <div className="w3-margin">
                                 <label><b>Start Date</b> </label><br/>
-                                <input className="w3-text-black" type="text" placeholder="MM/DD/YYYY" style={{width: "300px"}} name="starteddate"/>
+                                <input className="w3-text-black" type="date" style={{width: "300px"}} name="starteddate"></input>
                             </div>
 
                         </div>

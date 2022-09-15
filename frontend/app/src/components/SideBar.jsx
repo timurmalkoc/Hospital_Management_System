@@ -9,6 +9,7 @@ export default function SideBar(Props){
     const links = {
         patient: {
             Overview:{link:'/dashboard', className:"fa fa-eye fa-fw", link_text:"Overview"},
+            DoctorList:{link:'/doctorlist', className:"fa fa-cog fa-fw", link_text:"Get an Appointment"},
             Settings:{link:'/viewaccount', className:"fa fa-cog fa-fw", link_text:"Settings"}
         },
         admin: {

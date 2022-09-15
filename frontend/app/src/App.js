@@ -1,19 +1,23 @@
-import Navbar from './components/Navbar';
-import Login from './components/Login';
-import AlertMessage from './components/AlertMessage';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import Signup from './components/Singup';
-import Dashboard from './components/PatientDashboard';
-import SideBar from './components/SideBar';
-import ViewAccount from './components/ViewAccount';
-import Footer from './components/Footer';
-import UpdateProfile from './components/UpdateProfile';
-import AdminDashboard from './components/AdminDashboard';
-import NewUsers from './components/NewUsers';
-import ActiveUsers from './components/ActiveUsers';
-import AddNewUser from './components/AddNewUser';
-import StaffList from './components/StaffList';
+import Navbar from './components/Navbar'
+import Login from './components/Login'
+import AlertMessage from './components/AlertMessage'
+import { Routes, Route, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import Signup from './components/Singup'
+import Dashboard from './components/PatientDashboard'
+import SideBar from './components/SideBar'
+import ViewAccount from './components/ViewAccount'
+import Footer from './components/Footer'
+import UpdateProfile from './components/UpdateProfile'
+import AdminDashboard from './components/AdminDashboard'
+import NewUsers from './components/NewUsers'
+import ActiveUsers from './components/ActiveUsers'
+import AddNewUser from './components/AddNewUser'
+import StaffList from './components/StaffList'
+import ViewStaffAccount from './components/ViewStaffAccount'
+import UpdateStaff from './components/UpdateStaff'
+import DoctorList from './components/DoctorList'
+import Appointment from './components/Appointment'
 
 function App(props) {
   let navigate = useNavigate()
@@ -62,6 +66,10 @@ function App(props) {
         <Route path='/activeusers' element={<ActiveUsers base_url={base_url} loggedIn={loggedIn} flashMessage={flashMessage}/>}/>
         <Route path='/addnewuser' element={<AddNewUser base_url={base_url} loggedIn={loggedIn} flashMessage={flashMessage}/>}/>
         <Route path='/stafflist' element={<StaffList base_url={base_url} loggedIn={loggedIn} flashMessage={flashMessage}/>}/>
+        <Route path='/viewstaffaccount/:personId' element={<ViewStaffAccount flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
+        <Route path='/updatestaff/:personId' element={<UpdateStaff flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
+        <Route path='/doctorlist' element={<DoctorList flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
+        <Route path='/appointment/:doctorId' element={<Appointment flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
       </Routes>
       <Footer/>
     </>

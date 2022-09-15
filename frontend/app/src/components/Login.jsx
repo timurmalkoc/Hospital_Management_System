@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
     export default function Login(props) {
         let navigate = useNavigate()
         useEffect(() => {
-            if(props.loggedIn)
-                navigate('/viewaccount')
+            if(props.loggedIn == 'patient')
+                navigate('/dashboard')
+            else if(props.loggedIn == 'admin')
+                navigate('/admindashboard')
         }, [props.loggedIn])
         
 
@@ -33,10 +35,11 @@ import { useNavigate } from 'react-router-dom';
                 localStorage.setItem('username', data.username)
                 localStorage.setItem('profile_img', data.profile_img)
                 props.login()
-                if(data.user_type == 'patient')
-                navigate('/dashboard')
-                else if(data.user_type == 'admin')
-                navigate('/admindashboard')
+                if(data.user_type.toLowerCase() == 'patient')
+                    navigate('/dashboard')
+                else if(data.user_type.toLowerCase() == 'admin')
+                    navigate('/admindashboard')
+                
             }else{
                 console.log(response.status)
                 if(response.status == 400){
@@ -58,19 +61,19 @@ import { useNavigate } from 'react-router-dom';
                     </div>
                     <div className="w3-container w3-card">
                     <form onSubmit={login}>
-                        <div className="w3-margin">
-                            <label><b>User Name</b> </label>
-                            <input className="w3-input w3-card w3-text-black" type="text" placeholder="User Name" name="username"/>
+                        <div class="form-floating m-3 mt-5">
+                            <input type="text" class="form-control" id="floatingInput" placeholder="username" name="username"/>
+                            <label for="floatingInput">User Name</label>
                         </div>
-                        <div className="w3-margin">
-                            <label><b>Password</b></label>
-                            <input className="w3-input w3-card w3-text-black" type="password" placeholder="Password" name="password"/>
+                        <div class="form-floating m-3">
+                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password"/>
+                            <label for="floatingPassword">Password</label>
                         </div>
                         <div className="w3-margin">
                             <a href="/signup" className="link-dark"><b>Click to Create Patient Account</b></a>
                         </div>
                         <div className="w3-margin">
-                        <button className="w3-button w3-hover-blue w3-card" type="submit"><b>Login</b></button>
+                        <button className="btn btn-outline-primary col-2" style={{color:"white"}} type="submit"><b>Login</b></button>
                         </div>
                     </form>
                     </div>

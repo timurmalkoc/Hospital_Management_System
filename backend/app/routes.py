@@ -37,13 +37,33 @@ def update_person_info(person_id):
     return jsonify({'error': 'You do not have permission to update this user'}), 403
 
 
+# get doctor list
+@app.route('/doctorlist')
+@token_auth.login_required
+def get_doctor():
+    user_type = get_user_type(token_auth.current_user().token)
+    if user_type.lower() == 'patient':
+        staff = Staff.query.filter(Staff.role == 'Doctor').all()
+        return jsonify([s.to_dict() for s in staff]),200
+    return jsonify({'error': 'You do not have permission to this action'}), 403
+
+# get doctor by id
+@app.route('/doctor/<int:doctor_id>')
+@token_auth.login_required
+def get_doctor_by_id(doctor_id):
+    user_type = get_user_type(token_auth.current_user().token)
+    if user_type.lower() == 'patient':
+        doctor = Staff.query.filter(Staff.personal_info_id == doctor_id).first()
+        return jsonify(doctor.to_dict()),200
+    return jsonify({'error': 'You do not have permission to this action'}), 403
+
 # ================================ admin ===================================
 # de-active accounts
 @app.route('/newusers')
 @token_auth.login_required
 def new_users():
     user_type = get_user_type(token_auth.current_user().token)
-    if user_type == 'admin' or user_type == 'Admin':
+    if user_type.lower() == 'admin':
         users = Personal.query.filter(Personal.active==False).all()
         return jsonify([user.to_dict() for x,user in enumerate(users)]),200
     return jsonify({'error': 'You do not have permission to this action'}), 403
@@ -53,7 +73,7 @@ def new_users():
 @token_auth.login_required
 def active_users():
     user_type = get_user_type(token_auth.current_user().token)
-    if user_type == 'admin' or user_type == 'Admin':
+    if user_type.lower() == 'admin':
         users = Personal.query.filter(Personal.active==True).all()
         return jsonify([user.to_dict() for x,user in enumerate(users)]),200
     return jsonify({'error': 'You do not have permission to this action'}), 403
@@ -63,18 +83,18 @@ def active_users():
 @token_auth.login_required
 def activate_user_accout(user_id):
     user_type = get_user_type(token_auth.current_user().token)
-    if user_type == 'admin' or user_type == 'Admin':
+    if user_type.lower() == 'admin':
         person = Personal.query.filter(Personal.personal_info_id==user_id).first()
         person.activate()
         return jsonify({'success': 'Person account has been activated'}), 200    
     return jsonify({'error': 'You do not have permission to this action'}), 403
 
-# activate a new account
+# deactivate a new account
 @app.route('/deactivateuser/<int:user_id>', methods=['PUT'])
 @token_auth.login_required
 def deactivate_user_accout(user_id):
     user_type = get_user_type(token_auth.current_user().token)
-    if user_type == 'admin' or user_type == 'Admin':
+    if user_type.lower() == 'admin':
         person = Personal.query.filter(Personal.personal_info_id==user_id).first()
         person.deactivate()
         return jsonify({'success': 'Person account has been deactivated'}), 200    
@@ -85,7 +105,7 @@ def deactivate_user_accout(user_id):
 @token_auth.login_required
 def new_staff():
     user_type = get_user_type(token_auth.current_user().token)
-    if user_type != 'admin' or user_type == 'Admin':
+    if user_type.lower() != 'admin':
         return jsonify({'error': 'You do not have permission to this action'}), 403
 
     if not request.is_json:
@@ -112,6 +132,28 @@ def new_staff():
 
     return jsonify({'success':'New user is created successfully !'}), 201
 
+# Update staff
+@app.route('/updatestaff/<int:user_id>', methods=['PUT'])
+@token_auth.login_required
+def update_staff(user_id):
+    user_type = get_user_type(token_auth.current_user().token)
+    print(user_type)
+    if user_type.lower() != 'admin':
+        return jsonify({'error': 'You do not have permission to this action'}), 403
+
+    if not request.is_json:
+        return jsonify({'error: Your request content-type must be application/json'}), 400
+
+    data = request.json
+    
+    user = Personal.query.filter(Personal.personal_info_id == user_id).first()
+    staff = Staff.query.filter(user.personal_info_id == Staff.personal_info_id).first()
+
+    if user and staff:
+        user.update(data)
+        staff.update(data)
+        return jsonify({'success':'New user is created successfully !'}), 201
+
 # staff list
 @app.route('/stafflist')
 @token_auth.login_required
@@ -121,3 +163,23 @@ def staff_list():
         staff = Staff.query.all()
         return jsonify([s.to_dict() for s in staff]),200
     return jsonify({'error': 'You do not have permission to this action'}), 403
+
+# get staff with user id
+@app.route('/stafflist/<int:user_id>')
+@token_auth.login_required
+def get_staff(user_id):
+    user_type = get_user_type(token_auth.current_user().token)
+    if user_type == 'admin' or user_type == 'Admin':
+        person = Personal.query.get_or_404(user_id)
+        staff = Staff.query.filter(person.personal_info_id == Staff.personal_info_id).first()
+        return jsonify(staff.to_dict()),200
+    return jsonify({'error': 'You do not have permission to this action'}), 403
+
+# get user with id
+@app.route('/personalinfo/<int:user_id>')
+@token_auth.login_required
+def get_staff_info(user_id):
+    user_type = get_user_type(token_auth.current_user().token)
+    if user_type == 'admin' or user_type == 'Admin':
+        person = Personal.query.get_or_404(user_id)
+        return jsonify(person.to_dict()), 201

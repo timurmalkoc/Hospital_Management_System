@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export default function StaffCard(props) {
+export default function StaffCardAppointment(props) {
   let navigate = useNavigate()
   // activate account
 
@@ -14,12 +14,9 @@ export default function StaffCard(props) {
             <p><i className="fa fa-mobile fa-fw w3-margin-right w3-text-theme"></i>{props.phone}</p>
             <p><i className="fa fa-briefcase fa-fw w3-margin-right w3-text-theme"></i>{props.role}</p>
             <p><i className="fa fa-sitemap fa-fw w3-margin-right w3-text-theme"></i>{props.department}</p>
-            <p><i className="fa fa-home fa-fw w3-margin-right w3-text-theme"></i>{props.address}</p>
-            <p><i className="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i>{new Date(props.birth).toDateString()}</p>
-            <p className={`badge ${props.active? "bg-success":"bg-warning"}`} style={{width:"265px"}}>{props.active ? "Active":"Frozen"}</p>
           </div>
           <div className="d-flex justify-content-center mb-4">
-              <a onClick={() => navigate(`/viewstaffaccount/${props.id}`)} className="btn btn-outline-warning ms-1">Check Detailed</a>
+              <a onClick={() => navigate(`/appointment/${props.id}`)} className="btn btn-outline-warning ms-1">Get Appointment</a>
           </div>
         </div>
   )}

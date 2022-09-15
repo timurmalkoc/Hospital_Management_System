@@ -4,7 +4,6 @@ from app.blueprints.staff.models import Staff
 
 class Appointment(db.Model):
     appointment_id =    db.Column(db.Integer, primary_key=True)
-    time_slot =         db.Column(db.Time, nullable=False)
     appointment_date =  db.Column(db.DateTime, nullable=False)
     reason =            db.Column(db.String(400), nullable=True)
     status =            db.Column(db.Boolean, nullable=True, default=False)

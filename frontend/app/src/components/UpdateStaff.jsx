@@ -20,6 +20,9 @@ import { useNavigate, useParams } from 'react-router-dom'
         const [ department, setDepartment ] = useState('')
         const [ role, setRole ] = useState('')
         const [ start_date, setStartDate ] = useState('')
+        const [ experience, setExperience ] = useState('')
+        const [ specialties, setSpecialties ] = useState('')
+        const [ about, setAbout ] = useState('')
     // fetching data ========================
         
             if(!props.loggedIn)
@@ -53,6 +56,9 @@ import { useNavigate, useParams } from 'react-router-dom'
                     setDepartment(user.department)
                     setRole(user.role)
                     setStartDate(user.started_date)
+                    setAbout(user.about)
+                    setSpecialties(user.specialties)
+                    setExperience(user.experience)
                 })
                 .catch(err =>
                     props.flashMessage('Encountered an issue, Please try again !', 'danger'))
@@ -82,7 +88,10 @@ import { useNavigate, useParams } from 'react-router-dom'
                 profile_img:e.target.imgurl.value,
                 department: e.target.department.value,
                 role:       e.target.role.value,
-                started_date:e.target.starteddate.value
+                started_date:e.target.starteddate.value,
+                experience: e.target.experience.value,
+                about:      e.target.about.value,
+                specialties:e.target.specialties.value
             })
             await fetch(`${props.base_url}/updatestaff/${personId}`, {
                 method:'PUT',
@@ -207,13 +216,28 @@ import { useNavigate, useParams } from 'react-router-dom'
                                 <option value="Receptionist">Receptionist</option>
                                 <option value="other">other</option>
                                 </select>
-                            </div>
+                            </div>                       
                             <div className="w3-margin">
                                 <label><b>Start Date</b> </label><br/>
                                 <input className="w3-text-black" value={start_date? (new Date(start_date)).toDateString():null} onChange={e => setStartDate(e.target.value)} type="text" placeholder="MM/DD/YYYY" style={{width: "300px"}} name="starteddate"/>
                             </div>
-
                         </div>
+                            <div className='d-flex flex-wrap justify-content-around'> 
+                                <div className="w3-margin">
+                                    <label><b>Experience</b> </label><br/>
+                                    <input className="w3-text-black" type="text" value={experience? experience:null} onChange={e => setExperience(e.target.value)} placeholder="" name="experience" style={{width: "300px"}} />
+                                </div>
+                                <div className="w3-margin">
+                                    <label><b>Specialties</b> </label><br/>
+                                    <input className="w3-text-black" type="text" value={specialties? specialties:null} onChange={e => setSpecialties(e.target.value)} placeholder="Specialties" style={{width: "300px"}} name="specialties"/>
+                                </div>
+                                <div className="w3-margin">
+                                    <div className="form-floating">
+                                        <textarea className="form-control" placeholder="Leave a comment here" value={about? about:null} onChange={e => setAbout(e.target.value)} id="floatingTextarea2" style={{height:"100px", width: "300px"}} name="about"></textarea>
+                                        <label htmlFor="floatingTextarea2">About</label>
+                                    </div>
+                                </div>   
+                            </div>                  
                     <button className="w3-button w3-hover-blue w3-card d-grid gap-2 col-3 mx-auto" type="submit"><b>Update</b></button>                        
                 </form>
             </div>

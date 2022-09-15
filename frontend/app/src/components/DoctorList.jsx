@@ -6,8 +6,6 @@ import StaffCardAppointment from './StaffCardAppointment'
         let navigate = useNavigate()
         const [data, setData] = useState([])
         useEffect(() => {
-            if(localStorage.getItem('user_type') != 'patient')
-                navigate('/viewaccount')
 
             let myHeaders = new Headers()
 

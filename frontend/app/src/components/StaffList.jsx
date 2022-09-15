@@ -27,7 +27,8 @@ import StaffCard from './StaffCard'
                 <div className='d-flex flex-wrap justify-content-evenly'>
                 {data ? 
                 data.map((person, idx) => <StaffCard flashMessage={props.flashMessage} base_url={props.base_url} fullname={person.personal.first_name +" "+ person.personal.last_name} address={person.personal.city +" "+person.personal.state} key={idx} 
-                        birth={person.personal.birthday} profile={person.personal.profile_img} phone={person.personal.phone} id={person.personal.personal_info_id} department={person.department} role={person.role} active={person.personal.active}/> ) 
+                        birth={person.personal.birthday} profile={person.personal.profile_img} phone={person.personal.phone} id={person.personal.personal_info_id} department={person.department} role={person.role} active={person.personal.active}
+                        about={person.about} experience={person.experience} specialties={person.specialties}/> ) 
                 : 
                 <h1>There is no user to check</h1> }
                 </div>

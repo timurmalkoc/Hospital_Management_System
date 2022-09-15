@@ -38,7 +38,10 @@ import { useNavigate } from 'react-router-dom'
                     profile_img:e.target.profileimg.value,
                     role:       e.target.role.value,
                     department: e.target.department.value,
-                    started_date:e.target.starteddate.value
+                    started_date:e.target.starteddate.value,
+                    about:      e.target.about.value,
+                    experience: e.target.experience.value,
+                    specialties:e.target.specialties.value
                 })
 
                 await fetch(`${props.base_url}/newstaff`, {
@@ -177,6 +180,24 @@ import { useNavigate } from 'react-router-dom'
                                 <input className="w3-text-black" type="date" style={{width: "300px"}} name="starteddate"></input>
                             </div>
 
+                        </div>
+                        <h2 className='ms-4 mt-4'>Optinal</h2>
+                        <hr/>
+                        <div className='d-flex flex-wrap justify-content-around'>                            
+                            <div className="w3-margin">
+                                <label><b>Experience</b> </label><br/>
+                                <input className="w3-text-black" type="text" placeholder="" name="experience"/>
+                            </div>
+                            <div className="w3-margin">
+                                <label><b>Specialties</b> </label><br/>
+                                <input className="w3-text-black" type="text" placeholder="Specialties" style={{width: "300px"}} name="specialties"/>
+                            </div>
+                            <div className="w3-margin">
+                                <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style={{height:"100px", width: "300px"}} name="about"></textarea>
+                                    <label for="floatingTextarea2">About</label>
+                                </div>
+                            </div>             
                         </div>
                         <button className="w3-button w3-hover-blue w3-card d-grid gap-2 col-3 mx-auto mt-3 mb-4" type="submit"><b>Register</b></button>                        
                     </form>

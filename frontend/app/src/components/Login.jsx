@@ -57,17 +57,17 @@ import { useNavigate } from 'react-router-dom';
                 <img className="w3-image w3-opacity" src="https://www.clarkconstruction.com/sites/default/files/project_feat_images/Malcolm%20X%20Exterior_005_jpg.jpg" alt="HMS" style={{minWidth:"1000px"}} width={"1500"} height={"800"} />
                 <div className="w3-display-middle w3-padding w3-col l6">
                     <div className="w3-container w3-card">
-                    <h2><i className="fa fa-user-circle w3-margin-right"></i><b>Login</b></h2>
+                    <h2><i className="fa fa-sign-in w3-margin-right"></i><b>Login</b></h2>
                     </div>
                     <div className="w3-container w3-card">
                     <form onSubmit={login}>
-                        <div class="form-floating m-3 mt-5">
-                            <input type="text" class="form-control" id="floatingInput" placeholder="username" name="username"/>
-                            <label for="floatingInput">User Name</label>
+                        <div className="form-floating m-3 mt-5">
+                            <input type="text" className="form-control" id="floatingInput" placeholder="username" name="username"/>
+                            <label htmlFor="floatingInput">User Name</label>
                         </div>
-                        <div class="form-floating m-3">
-                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password"/>
-                            <label for="floatingPassword">Password</label>
+                        <div className="form-floating m-3">
+                            <input type="password" className="form-control" id="floatingPassword" placeholder="Password" name="password"/>
+                            <label htmlFor="floatingPassword">Password</label>
                         </div>
                         <div className="w3-margin">
                             <a href="/signup" className="link-dark"><b>Click to Create Patient Account</b></a>

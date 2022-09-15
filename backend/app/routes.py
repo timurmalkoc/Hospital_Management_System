@@ -3,6 +3,7 @@ from flask import render_template, jsonify, request
 from app.blueprints.auth.basic_auth import token_auth, get_user_type
 from app.models import Personal
 from app.blueprints.staff.models import Staff
+from app.blueprints.appointment.models import Appointment
 
 @app.route('/')
 def index():
@@ -41,21 +42,42 @@ def update_person_info(person_id):
 @app.route('/doctorlist')
 @token_auth.login_required
 def get_doctor():
-    user_type = get_user_type(token_auth.current_user().token)
-    if user_type.lower() == 'patient':
-        staff = Staff.query.filter(Staff.role == 'Doctor').all()
-        return jsonify([s.to_dict() for s in staff]),200
-    return jsonify({'error': 'You do not have permission to this action'}), 403
+    staff = Staff.query.filter(Staff.role == 'Doctor').all()
+    return jsonify([s.to_dict() for s in staff]),200
+
 
 # get doctor by id
 @app.route('/doctor/<int:doctor_id>')
 @token_auth.login_required
 def get_doctor_by_id(doctor_id):
-    user_type = get_user_type(token_auth.current_user().token)
-    if user_type.lower() == 'patient':
-        doctor = Staff.query.filter(Staff.personal_info_id == doctor_id).first()
-        return jsonify(doctor.to_dict()),200
-    return jsonify({'error': 'You do not have permission to this action'}), 403
+    doctor = Staff.query.filter(Staff.personal_info_id == doctor_id).first()
+    return jsonify(doctor.to_dict()),200
+
+
+# schedule appointment
+@app.route('/scheduleappointment/<doctor_id>', methods=['POST'])
+@token_auth.login_required
+def schedule_appintment(doctor_id):
+    current_user = token_auth.current_user()
+    if not request.is_json:
+        return jsonify({'error: Your request content-type must be application/json'}), 400
+
+    data = request.json
+    
+    if 'appointment_date' in data:
+        staff = Staff.query.filter(Staff.personal_info_id == doctor_id).first()
+        Appointment(appointment_date=data['appointment_date'], reason=data['reason'], doctor_id=staff.staff_id, patient_id=current_user.personal_info_id)
+        return jsonify({'success':'You schedule an appointment successfully'}), 201
+    return jsonify({'error': 'Missing requirement'}), 403
+
+# get a person all appintments
+@app.route('/checkappointments')
+@token_auth.login_required
+def get_appintments():
+    current_user = token_auth.current_user()
+    appointments = Appointment.query.filter(Appointment.patient_id==current_user.personal_info_id).all()
+    return jsonify([a.to_dict() for a in appointments]),200
+    
 
 # ================================ admin ===================================
 # de-active accounts
@@ -169,7 +191,7 @@ def staff_list():
 @token_auth.login_required
 def get_staff(user_id):
     user_type = get_user_type(token_auth.current_user().token)
-    if user_type == 'admin' or user_type == 'Admin':
+    if user_type.lower() == 'admin':
         person = Personal.query.get_or_404(user_id)
         staff = Staff.query.filter(person.personal_info_id == Staff.personal_info_id).first()
         return jsonify(staff.to_dict()),200
@@ -180,6 +202,46 @@ def get_staff(user_id):
 @token_auth.login_required
 def get_staff_info(user_id):
     user_type = get_user_type(token_auth.current_user().token)
-    if user_type == 'admin' or user_type == 'Admin':
+    if user_type.lower() == 'admin':
         person = Personal.query.get_or_404(user_id)
+        return jsonify(person.to_dict()), 201
+
+# get all poeple appointments
+@app.route('/allppointments')
+@token_auth.login_required
+def get_all_appintments():
+    user_type = get_user_type(token_auth.current_user().token)
+    if user_type.lower() == 'admin':
+        appointments = Appointment.query.all()
+        return jsonify([a.to_dict() for a in appointments]),200
+
+# approve appointment
+@app.route('/acceptappointment/<int:appointment_id>', methods=['PUT'])
+@token_auth.login_required
+def approve_an_appintments(appointment_id):
+    user_type = get_user_type(token_auth.current_user().token)
+    if user_type.lower() == 'admin':
+        appointment = Appointment.query.get_or_404(appointment_id)
+        appointment.approve()
+        return jsonify({'success':'Appointment approved successfully'}), 201
+    return jsonify({'error': 'You do not have permission to this action'}), 403
+
+# decline appointment
+@app.route('/declineappointment/<int:appointment_id>', methods=['DELETE'])
+@token_auth.login_required
+def decline_an_appintments(appointment_id):
+    user_type = get_user_type(token_auth.current_user().token)
+    if user_type.lower() == 'admin':
+        appointment = Appointment.query.get_or_404(appointment_id)
+        appointment.delete()
+        return jsonify({'success':'Appointment has been removed successfully'}), 201
+    return jsonify({'error': 'You do not have permission to this action'}), 403
+
+# get current user info
+@app.route('/viewuser/<int:person_id>')
+@token_auth.login_required
+def user_info(person_id):
+    user_type = get_user_type(token_auth.current_user().token)
+    if user_type.lower() == 'admin':
+        person = Personal.query.get_or_404(person_id)
         return jsonify(person.to_dict()), 201

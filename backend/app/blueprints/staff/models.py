@@ -9,6 +9,9 @@ class Staff(db.Model):
     role =              db.Column(db.String(50), nullable=False)
     started_date =      db.Column(db.DateTime(), nullable=False)
     personal_info_id =  db.Column(db.Integer, db.ForeignKey('personal.personal_info_id'), nullable=False)
+    specialties =       db.Column(db.String(50), nullable=True)
+    experience =        db.Column(db.String(10), nullable=True)
+    about =             db.Column(db.String(3000), nullable=True)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -25,6 +28,9 @@ class Staff(db.Model):
             'role': self.role,
             'started_date': self.started_date,
             'personal_info_id': self.personal_info_id,
+            'specialties': self.specialties,
+            'experience': self.experience,
+            'about': self.about,
             'personal': Personal.query.filter(Personal.personal_info_id==self.personal_info_id).first().to_dict()
         }
 
@@ -34,7 +40,7 @@ class Staff(db.Model):
 
     def update(self, data):
         for field in data:
-            if field in {'staff_id', 'department', 'role','started_date','personal_info_id'}:
+            if field in {'staff_id', 'department', 'role','started_date','personal_info_id', 'about', 'experience', 'specialties'}:
                 setattr(self, field, data[field])
         db.session.commit()
 

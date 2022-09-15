@@ -16,6 +16,8 @@ export default function StaffCard(props) {
             <p><i className="fa fa-sitemap fa-fw w3-margin-right w3-text-theme"></i>{props.department}</p>
             <p><i className="fa fa-home fa-fw w3-margin-right w3-text-theme"></i>{props.address}</p>
             <p><i className="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i>{new Date(props.birth).toDateString()}</p>
+            {props.experience ?<p><i className="fa fa-asterik fa-fw w3-margin-right w3-text-theme"></i>{props.experience}</p> : null}
+            {props.specialties ? <p><i className="fa fa-tag fa-fw w3-margin-right w3-text-theme"></i>{props.specialties}</p> : null}
             <p className={`badge ${props.active? "bg-success":"bg-warning"}`} style={{width:"265px"}}>{props.active ? "Active":"Frozen"}</p>
           </div>
           <div className="d-flex justify-content-center mb-4">

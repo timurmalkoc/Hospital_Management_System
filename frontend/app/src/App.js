@@ -18,6 +18,9 @@ import ViewStaffAccount from './components/ViewStaffAccount'
 import UpdateStaff from './components/UpdateStaff'
 import DoctorList from './components/DoctorList'
 import Appointment from './components/Appointment'
+import ViewAppointments from './components/ViewAppointments'
+import ViewAllAppointments from './components/ViewAllAppointments'
+import ViewUser from './components/ViewUser'
 
 function App(props) {
   let navigate = useNavigate()
@@ -61,6 +64,7 @@ function App(props) {
         <Route path='/dashboard' element={<Dashboard flashMessage={flashMessage} base_url={base_url}/>}/>
         <Route path='/admindashboard' element={<AdminDashboard flashMessage={flashMessage} base_url={base_url}/>}/>
         <Route path='/viewaccount' element={<ViewAccount base_url={base_url} loggedIn={loggedIn} flashMessage={flashMessage} logout={logout}/>}/>
+        <Route path='/viewaccount/:personId' element={<ViewUser base_url={base_url} loggedIn={loggedIn} flashMessage={flashMessage} logout={logout}/>}/>
         <Route path='/updateprofile/:person_id' element={<UpdateProfile flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
         <Route path='/newusers' element={<NewUsers base_url={base_url} loggedIn={loggedIn} flashMessage={flashMessage}/>}/>
         <Route path='/activeusers' element={<ActiveUsers base_url={base_url} loggedIn={loggedIn} flashMessage={flashMessage}/>}/>
@@ -70,6 +74,8 @@ function App(props) {
         <Route path='/updatestaff/:personId' element={<UpdateStaff flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
         <Route path='/doctorlist' element={<DoctorList flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
         <Route path='/appointment/:doctorId' element={<Appointment flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
+        <Route path='/appointments' element={<ViewAppointments flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
+        <Route path='/allappointments' element={<ViewAllAppointments flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
       </Routes>
       <Footer/>
     </>

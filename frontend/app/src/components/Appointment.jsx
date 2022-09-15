@@ -3,19 +3,35 @@ import addDays from 'date-fns/addDays'
 import "react-datepicker/dist/react-datepicker.css";
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
+import setHours from "date-fns/setHours";
+import setMinutes from "date-fns/setMinutes";
 
 export default function Appointment(props) {
-    const[start_date, setStartDate] = useState(new Date())
+    const [start_date, setStartDate] = useState(new Date())
+    const [data, setData] = useState([])
     const navigate = useNavigate()
     const { doctorId } = useParams()
 
         if(!props.loggedIn)
             navigate('/')
-        // Loding user info ==============
-        const [data, setData] = useState()
+
+        // disable weekends ------
+        const isWeekday = (date) => {
+            const day = date.getDay()
+
+            return day !== 0 && day !== 6;
+        }
+
+        // disable passed time
+        const filterPassedTime = (time) => {
+            const currentDate = new Date();
+            const selectedDate = new Date(time);
+        
+            return currentDate.getTime() < selectedDate.getTime();
+          };
+
+        // Load Doctor info ==============
         useEffect(() => {
-            if(localStorage.getItem('user_type') != 'patient')
-                navigate('/viewaccount')
 
             let myHeaders = new Headers()
 
@@ -29,14 +45,44 @@ export default function Appointment(props) {
             .catch(err => props.flashMessage('Encountered an issue, Please try again !', 'danger'))
         }, [])
 
+        // schedule appintment
+        const schedule = async e => {
+            let myHeaders = new Headers()
+            myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem('token'))
+            myHeaders.append('Content-Type', 'application/json')
 
+            let formData = JSON.stringify({
+                appointment_date:   e.target.appointment.value,
+                reason:             e.target.reason.value,
+                doctor_id:          doctorId
+            })
+            console.log(e.target.appointment.value)
+            await fetch(`${props.base_url}/scheduleappointment/${doctorId}`, {
+                method:'POST',
+                headers: myHeaders,
+                body:formData
+            })
+
+            .then(res => res.json())
+            .then(data => {
+                if(data.error)
+                    props.flashMessage(`${data.error}`, 'danger')
+                else{
+                    props.flashMessage('You have successfully scheduled an appointment', 'success')
+                    navigate('/doctorlist')
+                }
+
+            })
+        }
 
     return(
         <>
+        {data.length!==0?
+        <form onSubmit={schedule}>
         <div style={{marginLeft:"310px", marginTop:"60px"}}>
             <div className="d-flex justify-content-start col-lg-11 me-4 w3-row-padding">
             {/* doctor info */}
-                <div className="card mb-4 me-4 col-lg-8">
+                <div className="card mb-4 me-2 col-lg-11">
                     <div className="card-body">
                         {/* start of row */}
                         <div className="row">
@@ -82,6 +128,52 @@ export default function Appointment(props) {
                         </div>
                         <hr/>
                         {/* end of row */}
+
+                        {/* end of row */}
+                        {data.experience?
+                        <>
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <p className="mb-0">Experience</p>
+                            </div>
+                            <div className="col-sm-9">
+                                <p className="text-muted mb-0">{data? data.experience:null}</p>
+                            </div>
+                        </div>
+                        <hr/>
+                        </>
+                        : null}
+                        {/* end of row */}
+                        {/* end of row */}
+                        {data.specialties?
+                        <>
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <p className="mb-0">Specialties</p>
+                            </div>
+                            <div className="col-sm-9">
+                                <p className="text-muted mb-0">{data? data.specialties:null}</p>
+                            </div>
+                        </div>
+                        <hr/>
+                        </>
+                        : null}
+                        {/* end of row */}
+                        {/* end of row */}
+                        {data.about?
+                        <>
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <p className="mb-0">About</p>
+                            </div>
+                            <div className="col-sm-9">
+                                <p className="text-muted mb-0">{data? data.about:null}</p>
+                            </div>
+                        </div>
+                        <hr/>
+                        </>
+                        : null}
+                        {/* end of row */}
                     </div>
                 </div>
                 <div className="col-lg-2">
@@ -94,20 +186,41 @@ export default function Appointment(props) {
             </div>
             {/* appointment */}
             <hr/>
-                <p className="text-justify col-3 card ps-5 p-2">Pick an Appointment Time</p>
-                <DatePicker
+            <div className="d-flex justify-content-around">
+                <div className="w3-margin" >
+                    <p className="text-justify col-5 card ps-5 p-2" style={{width: "300px"}}>Pick an Appointment Time</p>
+                    <DatePicker
                         selected={ start_date? start_date:null }
                         onChange={ date => setStartDate(date) }
+                        filterDate={isWeekday}
+                        filterTime={filterPassedTime}
                         showTimeSelect
                         timeFormat="HH:mm"
-                        timeIntervals={20}
+                        timeIntervals={30}
                         timeCaption="time"
                         dateFormat="MMMM d, yyyy h:mm aa"
                         minDate={new Date()}
-                        maxDate={addDays(new Date(), 7)}
-                        className="col-3"
+                        maxDate={addDays(new Date(), 30)}
+                        minTime={setHours(setMinutes(new Date(), 30), 8)}
+                        maxTime={setHours(setMinutes(new Date(), 30), 16)}
+                        name='appointment'
+                        className="col-12"
                     />
+                </div>
+                <div className="w3-margin">
+                    <div className="form-floating">
+                        <textarea className="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style={{height:"100px", width: "300px"}} name="reason"></textarea>
+                        <label htmlFor="floatingTextarea2">Reason</label>
+                    </div>
+                </div>
+                </div>
+                <div className="d-flex justify-content-center mb-4">
+                    <button type="submit" className="btn btn-outline-success ms-1">Schedule</button>
+                </div>
+            
             </div>
+        </form>
+        :null}
             </>
     )   
 }

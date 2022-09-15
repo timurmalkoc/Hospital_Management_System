@@ -15,14 +15,14 @@ export default function ViewAccount(props){
             myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem('token'))
 
             
-            fetch(`${props.base_url}/personalinfo/${personId}` ,{
+            fetch(`${props.base_url}/stafflist/${personId}` ,{
                 headers: myHeaders
             })
             .then(res => res.json())
             .then(user => setData(user))
             .catch(() =>
                 props.flashMessage('Encountered an issue, Please try again !', 'danger'))
-        }, [])
+        }, [props.loggedIn])
 
         // Freeze staff account ============
 
@@ -65,11 +65,11 @@ export default function ViewAccount(props){
             navigate('/stafflist')
         })
         }
-
     return(
         <>
+        {data.length!==0?
+        <div>
             <div className="d-flex justify-content-start col-lg-11 me-4 w3-row-padding" style={{marginLeft:"310px", marginTop:"60px"}}>
-
                 <div className="card mb-4 me-4 col-lg-8">
                     <div className="card-body">
                         {/* start of row */}
@@ -78,7 +78,7 @@ export default function ViewAccount(props){
                                 <p className="mb-0">User Name</p>
                             </div>
                             <div className="col-sm-9">
-                                <p className="text-muted mb-0">{data? data.user_name:null}</p>
+                                <p className="text-muted mb-0">{data? data.personal.user_name:null}</p>
                             </div>
                         </div>
                         <hr/>
@@ -89,7 +89,7 @@ export default function ViewAccount(props){
                                 <p className="mb-0">Full Name</p>
                             </div>
                             <div className="col-sm-9">
-                                <p className="text-muted mb-0">{data? data.first_name:null} {data? data.middle_name:null} {data? data.last_name:null}</p>
+                                <p className="text-muted mb-0">{data? data.personal.first_name:null} {data? data.personal.middle_name:null} {data? data.personal.last_name:null}</p>
                             </div>
                         </div>
                         <hr/>
@@ -100,7 +100,7 @@ export default function ViewAccount(props){
                                 <p className="mb-0">Gender</p>
                             </div>
                             <div className="col-sm-9">
-                                <p className="text-muted mb-0">{data? data.gender:null}</p>
+                                <p className="text-muted mb-0">{data? data.personal.gender:null}</p>
                             </div>
                         </div>
                         <hr/>
@@ -111,7 +111,7 @@ export default function ViewAccount(props){
                                 <p className="mb-0">E-mail</p>
                             </div>
                             <div className="col-sm-9">
-                                <p className="text-muted mb-0">{data? data.email:null}</p>
+                                <p className="text-muted mb-0">{data? data.personal.email:null}</p>
                             </div>
                         </div>
                         <hr/>
@@ -122,7 +122,7 @@ export default function ViewAccount(props){
                                 <p className="mb-0">Date of Birth</p>
                             </div>
                             <div className="col-sm-9">
-                                <p className="text-muted mb-0">{data? (new Date(data.birthday)).toDateString():null}</p>
+                                <p className="text-muted mb-0">{data? (new Date(data.personal.birthday)).toDateString():null}</p>
                             </div>
                         </div>
                         <hr/>
@@ -133,7 +133,7 @@ export default function ViewAccount(props){
                                 <p className="mb-0">Phone</p>
                             </div>
                             <div className="col-sm-9">
-                                <p className="text-muted mb-0">{data? data.phone:null}</p>
+                                <p className="text-muted mb-0">{data? data.personal.phone:null}</p>
                             </div>
                         </div>
                         <hr/>
@@ -144,25 +144,70 @@ export default function ViewAccount(props){
                                 <p className="mb-0">Address</p>
                             </div>
                             <div className="col-sm-9">
-                                <p className="text-muted mb-0">{data? data.street:null}, {data? data.city:null}, {data? data.state:null} {data? data.zip_code:null}</p>
+                                <p className="text-muted mb-0">{data? data.personal.street:null}, {data? data.personal.city:null}, {data? data.personal.state:null} {data? data.personal.zip_code:null}</p>
                             </div>
                         </div>
                         <hr/>
+                        {/* end of row */}
+                        {data.experience?
+                        <>
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <p className="mb-0">Experience</p>
+                            </div>
+                            <div className="col-sm-9">
+                                <p className="text-muted mb-0">{data? data.experience:null}</p>
+                            </div>
+                        </div>
+                        <hr/>
+                        </>
+                        : null}
+                        {/* end of row */}
+                        {/* end of row */}
+                        {data.specialties?
+                        <>
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <p className="mb-0">Specialties</p>
+                            </div>
+                            <div className="col-sm-9">
+                                <p className="text-muted mb-0">{data? data.specialties:null}</p>
+                            </div>
+                        </div>
+                        <hr/>
+                        </>
+                        : null}
+                        {/* end of row */}
+                        {/* end of row */}
+                        {data.about?
+                        <>
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <p className="mb-0">About</p>
+                            </div>
+                            <div className="col-sm-9">
+                                <p className="text-muted mb-0">{data? data.about:null}</p>
+                            </div>
+                        </div>
+                        <hr/>
+                        </>
+                        : null}
                         {/* end of row */}
                     </div>
                 </div>
                 <div className="col-lg-2">
                     <div className="card mb-2">
                         <div className="card-body text-center">
-                            <img src={data? data.profile_img : "https://www.w3schools.com/w3images/avatar2.png"} alt="avatar" className="rounded-circle img-fluid" style={{width: "150px"}}/>   
+                            <img src={data? data.personal.profile_img : "https://www.w3schools.com/w3images/avatar2.png"} alt="avatar" className="rounded-circle img-fluid" style={{width: "150px"}}/>   
                         </div>
                     </div>
                 </div>
             </div>
+            {/* Edit Freeze button and model */}
             <div className="d-flex justify-content-center mb-2">
                 <a onClick={() => navigate(`/updatestaff/${data.personal_info_id}`)} className="btn btn-outline-primary ms-1">Edit</a>
-                { data ? 
-                    data.active ? 
+                { data.length!=0 ? 
+                    data.personal.active ? 
                     <>{console.log(data.active)}
                     <button type="button"  className="btn btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Freeze</button></>
                     :
@@ -186,7 +231,8 @@ export default function ViewAccount(props){
                   </div>
                 </div>
             </div>           
-        
+        </div>
+        :null}
         </>
     )
 }

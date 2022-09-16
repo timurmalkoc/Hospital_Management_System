@@ -3,7 +3,7 @@ from flask import render_template, jsonify, request
 from app.blueprints.auth.basic_auth import token_auth, get_user_type
 from app.models import Personal
 from app.blueprints.staff.models import Staff
-from app.blueprints.appointment.models import Appointment
+from app.blueprints.appointment.models import Appointment, Diagnose
 
 @app.route('/')
 def index():
@@ -242,6 +242,55 @@ def decline_an_appintments(appointment_id):
 @token_auth.login_required
 def user_info(person_id):
     user_type = get_user_type(token_auth.current_user().token)
-    if user_type.lower() == 'admin':
+    print(user_type)
+    if user_type.lower() in {'admin','nurse','doctor'}:
         person = Personal.query.get_or_404(person_id)
         return jsonify(person.to_dict()), 201
+
+# ================================ doctor ===================================
+# get all appintments by related a doctor
+@app.route('/doctorappointments')
+@token_auth.login_required
+def get_appintments_by_doctor():
+    current_user = token_auth.current_user()
+    user_type = get_user_type(token_auth.current_user().token)
+    if user_type.lower() == 'doctor':
+        staff = Staff.query.filter(Staff.personal_info_id==current_user.personal_info_id).first()
+        appointments = Appointment.query.filter(Appointment.doctor_id==staff.staff_id).all()
+    return jsonify([a.to_dict() for a in appointments]),200
+
+# diagnose entry
+@app.route('/diagnose', methods=['POST'])
+@token_auth.login_required
+def set_diagnose():
+    current_user = token_auth.current_user()
+    user_type = get_user_type(token_auth.current_user().token)
+    if user_type.lower() == 'doctor':
+        data = request.json
+
+    for field in {'appointment_id'}:
+        if field not in data:
+            return jsonify({'error':f"{field}' must be in resquest body"})
+        Diagnose(appointment_id=data['appointment_id'], diagnose=data['diagnose'], advice=data['advice'], medicine=data['medicine'],dosage=data['dosage'])
+        return jsonify({'success':'New user is created successfully !'}), 201
+    return jsonify({'error': 'You do not have permission to this action'}), 403
+
+# get diagnose
+@app.route('/diagnose/<int:id>')
+@token_auth.login_required
+def get_diagnose(id):
+    user_type = get_user_type(token_auth.current_user().token)
+    if user_type.lower() == 'doctor':
+        diagnose = Diagnose.query.filter(Diagnose.appointment_id==id).first()
+        return jsonify(diagnose.to_dict())
+
+# update diagnose
+@app.route('/updatediagnose/<int:id>', methods=['POST'])
+@token_auth.login_required
+def update_diagnose(id):
+    user_type = get_user_type(token_auth.current_user().token)
+    if user_type.lower() == 'doctor':
+        diagnose = Diagnose.query.filter(Diagnose.appointment_id==id).first()
+        diagnose.update(request.json)
+        return jsonify({'success':'Updated successfully'}), 201
+    return jsonify({'error': 'You do not have permission to this action'}), 403

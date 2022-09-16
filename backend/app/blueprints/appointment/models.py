@@ -41,3 +41,68 @@ class Appointment(db.Model):
     def approve(self):
         self.status = True
         db.session.commit()
+
+class Visit(db.Model):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        db.session.add(self)
+        db.session.commit()
+
+    visit_id =          db.Column(db.Integer, primary_key = True)
+    length =            db.Column(db.Integer, nullable=True)
+    weigth =            db.Column(db.Integer, nullable=True)
+    temp =              db.Column(db.Integer, nullable=True)
+    appointment_id =    db.Column(db.Integer, db.ForeignKey('appointment.appointment_id'), nullable=False)
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def update(self, data):
+        for field in data:
+            if field in {'length', 'weigth', 'temp','appointment_id'}:
+                setattr(self, field, data[field])
+        db.session.commit()
+
+    def to_dict(self):
+        return{
+            'visit_id': self.visit_id,
+            'length': self.length,
+            'weigth': self.weigth,
+            'temp': self.temp,
+            'appointment': Appointment.query.get(self.appointment_id).to_dict(),
+        }
+
+class Diagnose(db.Model):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        db.session.add(self)
+        db.session.commit()
+
+    diagnose_id =       db.Column(db.Integer, primary_key = True)
+    diagnose =          db.Column(db.String(1000), nullable=False)
+    advice =            db.Column(db.String(1000), nullable=True)
+    medicine =          db.Column(db.String(1000), nullable=True)
+    dosage =            db.Column(db.String(1000), nullable=True)
+    appointment_id =    db.Column(db.Integer, db.ForeignKey('appointment.appointment_id'), nullable=False)
+    
+    
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def update(self, data):
+        for field in data:
+            if field in {'diagnose', 'advice', 'medicine','dosage','appointment_id'}:
+                setattr(self, field, data[field])
+        db.session.commit()
+
+    def to_dict(self):
+        return{
+            'diagnose_id': self.diagnose_id,
+            'diagnose': self.diagnose,
+            'advice': self.advice,
+            'medicine': self.medicine,
+            'dosage': self.dosage,
+            'appointment': Appointment.query.get(self.appointment_id).to_dict(),
+        }

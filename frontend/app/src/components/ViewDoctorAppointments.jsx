@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import AppointmentCard from './AppointmentCard'
 import moment from 'moment/moment';
 
-export default function ViewAppointments(props){
+export default function ViewDoctorAppointments(props){
     const currentDate = new Date()
     let navigate = useNavigate()
     const [data, setData] = useState([])
@@ -16,7 +16,7 @@ export default function ViewAppointments(props){
 
             myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem('token'))
             
-            fetch(`${props.base_url}/checkappointments` ,{
+            fetch(`${props.base_url}/doctorappointments` ,{
                 headers: myHeaders
             })
             .then(res => res.json())
@@ -29,12 +29,13 @@ export default function ViewAppointments(props){
             <>
             {data.length!==0?
                 <div>
-                    <div className="d-flex flex-wrap justify-content-around col-lg-9" style={{marginLeft:"310px", marginTop:"60px"}}>
+                    <div className="d-flex flex-wrap justify-content-around col-lg-9 me-4 w3-row-padding" style={{marginLeft:"310px", marginTop:"60px"}}>
                         
-                        {data.map((person, idx) => moment(new Date(person.appointment_date)).add(moment.duration(4, 'hours')) > currentDate.getTime()? <AppointmentCard flashMessage={props.flashMessage} base_url={props.base_url} key={idx} idx={idx} 
+                        {data.map((person, idx) => moment(new Date(person.appointment_date)).add(moment.duration(4, 'hours')) < currentDate.getTime()? <AppointmentCard flashMessage={props.flashMessage} base_url={props.base_url} key={idx} idx={idx} 
                                 appointment_date={person.appointment_date} reason={person.reason} doctor={person.doctor.personal.first_name+" "+person.doctor.personal.last_name} status={person.status}
                                 phone={person.doctor.personal.phone} time={moment(new Date(person.appointment_date)).add(moment.duration(4, 'hours')).format("HH:mm")}
-                                
+                                patient={person.patient.first_name+" "+person.patient.last_name} patientId={person.patient.personal_info_id}
+                                appointment_id={person.appointment_id}
                         />:null ) }
                     </div>
                 </div>

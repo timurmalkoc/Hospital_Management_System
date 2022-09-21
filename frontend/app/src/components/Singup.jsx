@@ -67,7 +67,7 @@ import { useNavigate } from 'react-router-dom'
             <div>
                 <div className="l6 mt-5">
                     <div className="w3-container w3-card">
-                    <h2><i className="fa fa-bed w3-margin-right"></i>Patient Login</h2>
+                    <h2><i className="fa fa-bed w3-margin-right"></i>Patient Signup</h2>
                     </div>
                     </div><br/>
                     

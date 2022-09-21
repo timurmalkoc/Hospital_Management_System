@@ -4,10 +4,14 @@ import { useNavigate } from 'react-router-dom';
     export default function Login(props) {
         let navigate = useNavigate()
         useEffect(() => {
-            if(props.loggedIn == 'patient')
+            if(localStorage.getItem('user_type') == 'patient')
                 navigate('/dashboard')
-            else if(props.loggedIn == 'admin')
+            else if(localStorage.getItem('user_type') == 'admin')
                 navigate('/admindashboard')
+            else if(localStorage.getItem('user_type') == 'doctor')
+                navigate('/doctordashboard')
+            else if(localStorage.getItem('user_type') == 'nurse')
+                navigate('/nursedashboard')
         }, [props.loggedIn])
         
 

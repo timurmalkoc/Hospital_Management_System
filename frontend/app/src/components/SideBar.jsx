@@ -9,19 +9,34 @@ export default function SideBar(Props){
     const links = {
         patient: {
             Overview:{link:'/dashboard', className:"fa fa-eye fa-fw", link_text:"Overview"},
-            DoctorList:{link:'/doctorlist', className:"fa fa-cog fa-fw", link_text:"Get an Appointment"},
-            Appointments:{link:'/appointments', className:"fa fa-cog fa-fw", link_text:"My Appointments"},
+            DoctorList:{link:'/doctorlist', className:"fa fa-user-md fa-fw", link_text:"Get an Appointment"},
+            Appointments:{link:'/appointments', className:"fa fa-check-circle-o fa-fw", link_text:"Upcoming Appointments"},
+            AppointmentDeatils:{link:'/appointmentdetails', className:"fa fa-check-circle-o fa-fw", link_text:"Appointment Details"},
             Settings:{link:'/viewaccount', className:"fa fa-cog fa-fw", link_text:"Settings"}
         },
         admin: {
-            Overview:{link:'/admindashboard', className:"fa fa-eye fa-fw", link_text:"Overview"},
+            Overview:{link:'/dashboard', className:"fa fa-eye fa-fw", link_text:"Overview"},
             Newuser:{link:'/newusers', className:"fa fa-user fa-fw", link_text:"Activate Users"},
             Current:{link:'/activeusers', className:"fa fa-users fa-fw", link_text:"Current Users"},
             AddUser:{link:'/addnewuser', className:"fa fa-user-plus fa-fw", link_text:"Add New Staff"},
             Stafflist:{link:'/stafflist', className:"fa fa-user-plus fa-fw", link_text:"Staff List"},
-            AllAppointments:{link:'/allappointments', className:"fa fa-cog fa-fw", link_text:"Appointments"},
-            DoctorList:{link:'/doctorlist', className:"fa fa-cog fa-fw", link_text:"Get an Appointment"},
+            AllAppointments:{link:'/allappointments', className:"fa fa-get-pocket fa-fw", link_text:"Appointments"},
+            DoctorList:{link:'/doctorlist', className:"fa fa-user-md fa-fw", link_text:"Get an Appointment"},
+            Appointments:{link:'/appointments', className:"fa fa-check-circle-o fa-fw", link_text:"My Appointments"},
+            Settings:{link:'/viewaccount', className:"fa fa-cog fa-fw", link_text:"Settings"}
+        },
+        doctor:{
+            Overview:{link:'/doctordashboard', className:"fa fa-eye fa-fw", link_text:"Overview"},
+            DoctorList:{link:'/doctorlist', className:"fa fa-user-md fa-fw", link_text:"Get an Appointment"},
+            Appointments:{link:'/appointments', className:"fa fa-check-circle-o fa-fw", link_text:"My Appointments"},
+            DoctorAppointments:{link:'/doctorappointments', className:"fa fa-cog fa-fw", link_text:"Patient Appointments"},
+            Settings:{link:'/viewaccount', className:"fa fa-cog fa-fw", link_text:"Settings"}
+        },
+        nurse:{
+            Overview:{link:'/nursedashboard', className:"fa fa-eye fa-fw", link_text:"Overview"},
+            DoctorList:{link:'/doctorlist', className:"fa fa-user-md fa-fw", link_text:"Get an Appointment"},
             Appointments:{link:'/appointments', className:"fa fa-cog fa-fw", link_text:"My Appointments"},
+            PatientAppointments:{link:'/nurseappointments', className:"fa fa-check-circle-o fa-fw", link_text:"Patient Visits"},
             Settings:{link:'/viewaccount', className:"fa fa-cog fa-fw", link_text:"Settings"}
         }
     }

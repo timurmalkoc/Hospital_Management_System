@@ -1,9 +1,10 @@
+from traceback import print_tb
 from app import app
 from flask import render_template, jsonify, request
 from app.blueprints.auth.basic_auth import token_auth, get_user_type
 from app.models import Personal
 from app.blueprints.staff.models import Staff
-from app.blueprints.appointment.models import Appointment, Diagnose
+from app.blueprints.appointment.models import Appointment, Diagnose, Visit
 
 @app.route('/')
 def index():
@@ -70,7 +71,7 @@ def schedule_appintment(doctor_id):
         return jsonify({'success':'You schedule an appointment successfully'}), 201
     return jsonify({'error': 'Missing requirement'}), 403
 
-# get a person all appintments
+# get a person's all appintments
 @app.route('/checkappointments')
 @token_auth.login_required
 def get_appintments():
@@ -78,6 +79,7 @@ def get_appintments():
     appointments = Appointment.query.filter(Appointment.patient_id==current_user.personal_info_id).all()
     return jsonify([a.to_dict() for a in appointments]),200
     
+
 
 # ================================ admin ===================================
 # de-active accounts
@@ -263,16 +265,21 @@ def get_appintments_by_doctor():
 @app.route('/diagnose', methods=['POST'])
 @token_auth.login_required
 def set_diagnose():
-    current_user = token_auth.current_user()
     user_type = get_user_type(token_auth.current_user().token)
+    diagnose = None
     if user_type.lower() == 'doctor':
         data = request.json
+    diagnose = Diagnose.query.filter(Diagnose.appointment_id==data.get('appointment_id')).first()
 
-    for field in {'appointment_id'}:
-        if field not in data:
-            return jsonify({'error':f"{field}' must be in resquest body"})
-        Diagnose(appointment_id=data['appointment_id'], diagnose=data['diagnose'], advice=data['advice'], medicine=data['medicine'],dosage=data['dosage'])
-        return jsonify({'success':'New user is created successfully !'}), 201
+    if diagnose:
+        diagnose.update(request.json)
+        return jsonify({'success':'Updated successfully'}), 201
+    else:
+        for field in {'appointment_id'}:
+            if field not in data:
+                return jsonify({'error':f"{field}' must be in resquest body"})
+            Diagnose(appointment_id=data['appointment_id'], diagnose=data['diagnose'], advice=data['advice'], medicine=data['medicine'],dosage=data['dosage'])
+            return jsonify({'success':'Diagnose is created'}), 201
     return jsonify({'error': 'You do not have permission to this action'}), 403
 
 # get diagnose
@@ -282,15 +289,51 @@ def get_diagnose(id):
     user_type = get_user_type(token_auth.current_user().token)
     if user_type.lower() == 'doctor':
         diagnose = Diagnose.query.filter(Diagnose.appointment_id==id).first()
-        return jsonify(diagnose.to_dict())
+        if diagnose:
+            return jsonify(diagnose.to_dict())
+        else:
+            return jsonify({'success':'The content is emty'}), 200
 
-# update diagnose
-@app.route('/updatediagnose/<int:id>', methods=['POST'])
+# ================================ nurse ===================================
+# get all appintments by related a nurse
+@app.route('/visits')
 @token_auth.login_required
-def update_diagnose(id):
+def get_all_appointments():
     user_type = get_user_type(token_auth.current_user().token)
-    if user_type.lower() == 'doctor':
-        diagnose = Diagnose.query.filter(Diagnose.appointment_id==id).first()
-        diagnose.update(request.json)
+    if user_type.lower() == 'nurse':
+        appointments = Appointment.query.all()
+    return jsonify([a.to_dict() for a in appointments]),200
+
+
+# get visit details
+@app.route('/visits/<int:id>')
+@token_auth.login_required
+def get_visit_details(id):
+    user_type = get_user_type(token_auth.current_user().token)
+    if user_type.lower() == 'nurse':
+        visit = Visit.query.filter(Visit.appointment_id==id).first()
+        if visit:
+            return jsonify(visit.to_dict())
+        else:
+            return jsonify({'success':'The content is emty'}), 200
+
+# enter visit info
+@app.route('/visitinfo', methods=['POST'])
+@token_auth.login_required
+def set_visit_details():
+    user_type = get_user_type(token_auth.current_user().token)
+    visit = None
+    if user_type.lower() == 'nurse':
+        data = request.json
+    visit = Visit.query.filter(Visit.appointment_id==data.get('appointment_id')).first()
+
+    if visit:
+        visit.update(request.json)
         return jsonify({'success':'Updated successfully'}), 201
+    else:
+        for field in {'appointment_id'}:
+            if field not in data:
+                return jsonify({'error':f"{field}' must be in resquest body"})
+            Visit(appointment_id=data['appointment_id'], length=data['height'], weigth=data['weigth'], temp=data['temp'])
+            return jsonify({'success':'Visit details is created'}), 201
     return jsonify({'error': 'You do not have permission to this action'}), 403

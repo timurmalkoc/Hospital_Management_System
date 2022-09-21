@@ -6,7 +6,7 @@ export default function ViewAccount(props){
     const [data, setData] = useState([])
     const { personId } = useParams()
 
-        if(localStorage.getItem('user_type') != 'admin')
+        if(!(localStorage.getItem('user_type') == 'admin' ||  localStorage.getItem('user_type') == 'doctor' || localStorage.getItem('user_type') == 'nurse'))
             navigate('/viewaccount')
         // Loding user info ==============
         useEffect(() => {
@@ -136,9 +136,11 @@ export default function ViewAccount(props){
                 </div>
             </div>
             <div className="d-flex justify-content-center mb-2">
-                <a onClick={() => navigate(`/updateprofile/${data.personal_info_id}`)} className="btn btn-outline-success ms-1">Edit</a>
+                {/* Admin patient side */}
                 {localStorage.getItem('user_type') == 'patient' || localStorage.getItem('user_type') == 'admin' ?
-                <button type="button"  className="btn btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Freeze</button>  :  null }
+                <>
+                <a onClick={() => navigate(`/updateprofile/${data.personal_info_id}`)} className="btn btn-outline-success ms-1">Edit</a>
+                <button type="button"  className="btn btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Freeze</button>  </> :  null }
                 {/* =================== Modal ============== */}
                 <div className="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                   <div className="modal-dialog">
@@ -155,6 +157,7 @@ export default function ViewAccount(props){
                     </div>
                   </div>
                 </div>
+                {/* end of modal */}
             </div>           
         
         </>

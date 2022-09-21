@@ -1,4 +1,3 @@
-import { getRoles } from '@testing-library/react';
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -13,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 
             let password = e.target.password.value;
             let confirmpassword = e.target.confirmpassword.value;
-            if (password !== confirmpassword)
+            if (password !== confirmpassword || password=='')
                 props.flashMessage('Your passwords do not match', 'danger')
             else{
 

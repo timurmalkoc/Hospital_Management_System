@@ -2,7 +2,6 @@ import os
 import base64
 from datetime import datetime, timedelta
 from enum import unique
-from tkinter.tix import Tree
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 

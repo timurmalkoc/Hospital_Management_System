@@ -41,12 +41,14 @@ export default function Appointment(props) {
                 headers: myHeaders
             })
             .then(res => res.json())
-            .then(user => setData(user))
-            .catch(err => props.flashMessage('Encountered an issue, Please try again !', 'danger'))
+            .then(user => {
+                setData(user)                  
+            })
+
         }, [])
 
         // schedule appintment
-        const schedule = async e => {
+        const schedule = e => {
             let myHeaders = new Headers()
             myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem('token'))
             myHeaders.append('Content-Type', 'application/json')
@@ -57,7 +59,7 @@ export default function Appointment(props) {
                 doctor_id:          doctorId
             })
             console.log(e.target.appointment.value)
-            await fetch(`${props.base_url}/scheduleappointment/${doctorId}`, {
+            fetch(`${props.base_url}/scheduleappointment/${doctorId}`, {
                 method:'POST',
                 headers: myHeaders,
                 body:formData
@@ -65,16 +67,12 @@ export default function Appointment(props) {
 
             .then(res => res.json())
             .then(data => {
-                if(data.error)
-                    props.flashMessage(`${data.error}`, 'danger')
-                else{
+                if(data.ok)
                     props.flashMessage('You have successfully scheduled an appointment', 'success')
-                    navigate('/doctorlist')
-                }
-
-            })
+            })        
+            navigate('/appointments')
         }
-
+        
     return(
         <>
         {data.length!==0?

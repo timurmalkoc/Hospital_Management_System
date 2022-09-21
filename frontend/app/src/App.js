@@ -10,6 +10,8 @@ import ViewAccount from './components/ViewAccount'
 import Footer from './components/Footer'
 import UpdateProfile from './components/UpdateProfile'
 import AdminDashboard from './components/AdminDashboard'
+import DoctorDashboard from './components/DoctorDashboard'
+import NurseDashboard from './components/NurseDashboard'
 import NewUsers from './components/NewUsers'
 import ActiveUsers from './components/ActiveUsers'
 import AddNewUser from './components/AddNewUser'
@@ -21,6 +23,9 @@ import Appointment from './components/Appointment'
 import ViewAppointments from './components/ViewAppointments'
 import ViewAllAppointments from './components/ViewAllAppointments'
 import ViewUser from './components/ViewUser'
+import ViewDoctorAppointments from './components/ViewDoctorAppointments'
+import ViewNurseAppointments from './components/ViewNurseAppointments'
+import AppointmentDetails from './components/AppintmentDeatils'
 
 function App(props) {
   let navigate = useNavigate()
@@ -63,6 +68,8 @@ function App(props) {
         <Route path='/signup' element={<Signup flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
         <Route path='/dashboard' element={<Dashboard flashMessage={flashMessage} base_url={base_url}/>}/>
         <Route path='/admindashboard' element={<AdminDashboard flashMessage={flashMessage} base_url={base_url}/>}/>
+        <Route path='/doctordashboard' element={<DoctorDashboard flashMessage={flashMessage} base_url={base_url}/>}/>
+        <Route path='/nursedashboard' element={<NurseDashboard flashMessage={flashMessage} base_url={base_url}/>}/>
         <Route path='/viewaccount' element={<ViewAccount base_url={base_url} loggedIn={loggedIn} flashMessage={flashMessage} logout={logout}/>}/>
         <Route path='/viewaccount/:personId' element={<ViewUser base_url={base_url} loggedIn={loggedIn} flashMessage={flashMessage} logout={logout}/>}/>
         <Route path='/updateprofile/:person_id' element={<UpdateProfile flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
@@ -76,6 +83,9 @@ function App(props) {
         <Route path='/appointment/:doctorId' element={<Appointment flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
         <Route path='/appointments' element={<ViewAppointments flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
         <Route path='/allappointments' element={<ViewAllAppointments flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
+        <Route path='/doctorappointments' element={<ViewDoctorAppointments flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
+        <Route path='/nurseappointments' element={<ViewNurseAppointments flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
+        <Route path='/appointmentdetails' element={<AppointmentDetails flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
       </Routes>
       <Footer/>
     </>

@@ -25,7 +25,7 @@ class Appointment(db.Model):
             'reason': self.reason,
             'status': self.status,
             'doctor': Staff.query.get(self.doctor_id).to_dict(),
-            'patient': Personal.query.get(self.patient_id).to_dict()
+            'patient': Personal.query.get(self.patient_id).to_dict(),
         }
 
     def delete(self):
@@ -49,9 +49,9 @@ class Visit(db.Model):
         db.session.commit()
 
     visit_id =          db.Column(db.Integer, primary_key = True)
-    length =            db.Column(db.Integer, nullable=True)
-    weigth =            db.Column(db.Integer, nullable=True)
-    temp =              db.Column(db.Integer, nullable=True)
+    length =            db.Column(db.Numeric(5,2), nullable=True)
+    weigth =            db.Column(db.Numeric(5,2), nullable=True)
+    temp =              db.Column(db.Numeric(5,2), nullable=True)
     appointment_id =    db.Column(db.Integer, db.ForeignKey('appointment.appointment_id'), nullable=False)
 
     def delete(self):
@@ -67,11 +67,14 @@ class Visit(db.Model):
     def to_dict(self):
         return{
             'visit_id': self.visit_id,
-            'length': self.length,
-            'weigth': self.weigth,
+            'height': self.length,
+            'weight': self.weigth,
             'temp': self.temp,
-            'appointment': Appointment.query.get(self.appointment_id).to_dict(),
+            'appointment_id': self.appointment_id
         }
+
+    def __repr__(self):
+        return f"<Visit | {self.visit_id}>"
 
 class Diagnose(db.Model):
     def __init__(self,**kwargs):
@@ -104,5 +107,5 @@ class Diagnose(db.Model):
             'advice': self.advice,
             'medicine': self.medicine,
             'dosage': self.dosage,
-            'appointment': Appointment.query.get(self.appointment_id).to_dict(),
+            'appointment_id': self.appointment_id
         }

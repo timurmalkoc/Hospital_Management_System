@@ -10,12 +10,12 @@ export default function SideBar(Props){
         patient: {
             Overview:{link:'/dashboard', className:"fa fa-eye fa-fw", link_text:"Overview"},
             DoctorList:{link:'/doctorlist', className:"fa fa-user-md fa-fw", link_text:"Get an Appointment"},
-            Appointments:{link:'/appointments', className:"fa fa-check-circle-o fa-fw", link_text:"Upcoming Appointments"},
-            AppointmentDeatils:{link:'/appointmentdetails', className:"fa fa-check-circle-o fa-fw", link_text:"Appointment Details"},
+            Appointments:{link:'/appointments', className:"fa-regular fa-calendar-check fa-fw", link_text:"Upcoming Appointments"},
+            AppointmentDeatils:{link:'/appointmentdetails', className:"fa-solid fa-calendar-check fa-fw", link_text:"Appointment Details"},
             Settings:{link:'/viewaccount', className:"fa fa-cog fa-fw", link_text:"Settings"}
         },
         admin: {
-            Overview:{link:'/dashboard', className:"fa fa-eye fa-fw", link_text:"Overview"},
+            Overview:{link:'/admindashboard', className:"fa fa-eye fa-fw", link_text:"Overview"},
             Newuser:{link:'/newusers', className:"fa fa-user fa-fw", link_text:"Activate Users"},
             Current:{link:'/activeusers', className:"fa fa-users fa-fw", link_text:"Current Users"},
             AddUser:{link:'/addnewuser', className:"fa fa-user-plus fa-fw", link_text:"Add New Staff"},

@@ -202,9 +202,10 @@ export default function StaffCard(props) {
           {props.patient ?<p><i className="fa fa-user-o fa-fw w3-margin-right w3-text-theme"></i><a href={`/viewaccount/${props.patientId}`}>{props.patient}</a></p> : null}
             <hr/>
             <p><i className="fa fa-user-md fa-fw w3-margin-right w3-text-theme"></i>{props.doctorId ? <a href={`/viewstaffaccount/${props.doctorId}`}>{props.doctor}</a>:props.doctor}</p>
+            <p><i className="fa-solid fa-disease fa-fw w3-margin-right w3-text-theme"></i>{props.reason}</p>
             <p><i className="fa fa-clock-o fa-fw w3-margin-right w3-text-theme"></i>{props.time}</p>
             <p><i className="fa fa-mobile fa-fw w3-margin-right w3-text-theme"></i>{props.phone}</p>
-            
+
             {props.experience ?<p><i className="fa fa-asterik fa-fw w3-margin-right w3-text-theme"></i>{props.experience}</p> : null}
             {props.specialties ? <p><i className="fa fa-tag fa-fw w3-margin-right w3-text-theme"></i>{props.specialties}</p> : null}
             <p className={`badge ms-2 ${props.status? "bg-success":"bg-warning"}`} style={{width:"100px"}}>{props.status ? "Approved":"On Hold"}</p>

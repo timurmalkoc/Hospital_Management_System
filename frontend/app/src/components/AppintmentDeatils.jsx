@@ -33,7 +33,7 @@ export default function AppointmentDetails(props) {
 
             myHeaders.append('Authorization', 'Bearer ' + localStorage.getItem('token'))
             
-            fetch(`${props.base_url}/checkappointments` ,{
+            fetch(`${props.base_url}/detailed` ,{
                 headers: myHeaders
             })
             .then(res => res.json())
@@ -44,11 +44,12 @@ export default function AppointmentDetails(props) {
 
 
         const tableHeaders = ['Appointment Id', 'Doctor Name', 'Reason','Date','Time']
+        const subHeaders =['Weight', 'Height', 'Temperature', 'Diagnose', 'Advice', 'Medicine', 'Dosage']
     return(
         <>
           <div style={{marginLeft:"310px", marginTop:"60px"}}>
             {/* <button onClick={extend} className="w3-button col-11 w3-theme-l1 w3-left-align col-2">{btnName}</button> */}
-            <table className={`table table-primary table-striped mt-3 col-${col}`}>
+            <table className={`table table-primary table-hover table-striped mt-3 col-${col}`}>
                 <thead>
                     <tr>
                         {tableHeaders.map((head, i) => <th key={i}>{head}</th>)}
@@ -57,17 +58,51 @@ export default function AppointmentDetails(props) {
                 <tbody>
                     {
                      data.map((appointment, idx) => 
-                     moment(new Date(appointment.appointment_date)).add(moment.duration(4, 'hours')) < currentDate.getTime() && appointment.status?
+                     moment(new Date(appointment.appointment.appointment_date)).add(moment.duration(4, 'hours')) < currentDate.getTime() && appointment.appointment.status?
                      <>
-                        <tr key={idx} onClick={() => details(appointment.appointment_id)}>
-                            <td>{appointment.appointment_id}</td>
-                            <td>{appointment.doctor.personal.first_name+" "+appointment.doctor.personal.last_name}</td>
-                            <td>{appointment.reason}</td>
-                            <td>{moment(new Date(appointment.appointment_date)).add(moment.duration(4, 'hours')).format("MM-DD-YY")}</td>
-                            <td>{moment(new Date(appointment.appointment_date)).add(moment.duration(4, 'hours')).format("HH:mm")}</td>
+                        <tr key={idx} onClick={() => details(appointment.appointment.appointment_id)}>
+                            <td>{appointment.appointment.appointment_id}</td>
+                            <td>{appointment.appointment.doctor.personal.first_name+" "+appointment.appointment.doctor.personal.last_name}</td>
+                            <td>{appointment.appointment.reason}</td>
+                            <td>{moment(new Date(appointment.appointment.appointment_date)).add(moment.duration(4, 'hours')).format("MM-DD-YY")}</td>
+                            <td>{moment(new Date(appointment.appointment.appointment_date)).add(moment.duration(4, 'hours')).format("HH:mm")}</td>
                         </tr>
-                        <tr key={moment(new Date(appointment.appointment_date)).format("MMDDYYHHMM")} className={appointment.appointment_id==app? {sibClass}: ' w3-hide'}>
-                            <td>{0}</td>
+                        <tr key={moment(new Date(appointment.appointment.appointment_date)).format("MMDDYYHHMM")} className={appointment.appointment.appointment_id==app? {sibClass}: ' w3-hide'}>
+                    {/* sub table for deatails of visit */}
+                        <td colspan="5">
+                            <table className='table table-light col-${col}'>
+                            <thead>
+                                <tr>
+                                    {subHeaders.map((head, i) => <th key={i}>{head}</th>)}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        {appointment.visit.weight}
+                                    </td>
+                                    <td>
+                                        {appointment.visit.height}
+                                    </td>
+                                    <td>
+                                        {appointment.visit.temp}
+                                    </td>
+                                    <td>
+                                        {appointment.diagnose.diagnose}
+                                    </td>
+                                    <td>
+                                        {appointment.diagnose.advice}
+                                    </td>
+                                    <td>
+                                        {appointment.diagnose.medicine}
+                                    </td>
+                                    <td>
+                                        {appointment.diagnose.dosage}
+                                    </td>
+                                </tr>
+                            </tbody>
+                            </table>
+                            </td>
                         </tr>
                         </>
                         :null

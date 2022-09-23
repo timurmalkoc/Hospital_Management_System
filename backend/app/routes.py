@@ -1,3 +1,4 @@
+from heapq import merge
 from traceback import print_tb
 from app import app
 from flask import render_template, jsonify, request
@@ -5,6 +6,7 @@ from app.blueprints.auth.basic_auth import token_auth, get_user_type
 from app.models import Personal
 from app.blueprints.staff.models import Staff
 from app.blueprints.appointment.models import Appointment, Diagnose, Visit
+from jsonmerge import merge
 
 @app.route('/')
 def index():
@@ -79,7 +81,32 @@ def get_appintments():
     appointments = Appointment.query.filter(Appointment.patient_id==current_user.personal_info_id).all()
     return jsonify([a.to_dict() for a in appointments]),200
     
+# get a person's all appintments
+@app.route('/detailed')
+@token_auth.login_required
+def get_detailed():
+    current_user = token_auth.current_user()
+    appointments = Appointment.query.filter(Appointment.patient_id==current_user.personal_info_id).all()
+    detailed = []
+    for a in appointments:
+        visit = Visit.query.filter(Visit.appointment_id==a.appointment_id).first()
+        diagnose = Diagnose.query.filter(Diagnose.appointment_id==a.appointment_id).first()
+        detailed.append({'appointment':a.to_dict(), "visit":visit.to_dict() if visit else "", "diagnose":diagnose.to_dict() if diagnose else ""})
+    return jsonify(detailed),200
 
+@app.route('/patientstatistics')
+@token_auth.login_required
+def get_statistics():
+    current_user = token_auth.current_user()
+    total_appointment = Appointment.query.filter(Appointment.patient_id==current_user.personal_info_id).count()
+    appintments = Appointment.query.filter(Appointment.patient_id==current_user.personal_info_id).all()
+    app_statistics = []
+    for a in appintments:
+        visit = Visit.query.filter(Visit.appointment_id==a.appointment_id).first()
+        if visit:
+            app_statistics.append({"date":a.appointment_date.strftime("%m/%d/%Y"), "visit":visit.to_dict() if visit else ""})
+
+    return jsonify({'total_appointment':total_appointment, 'visit_statistics':app_statistics})
 
 # ================================ admin ===================================
 # de-active accounts

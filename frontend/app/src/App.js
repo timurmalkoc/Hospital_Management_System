@@ -66,10 +66,10 @@ function App(props) {
       <Routes>
         <Route path='/' element={<Login flashMessage={flashMessage} base_url={base_url} login={login} loggedIn={loggedIn}/>}/>
         <Route path='/signup' element={<Signup flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
-        <Route path='/dashboard' element={<Dashboard flashMessage={flashMessage} base_url={base_url}/>}/>
-        <Route path='/admindashboard' element={<AdminDashboard flashMessage={flashMessage} base_url={base_url}/>}/>
-        <Route path='/doctordashboard' element={<DoctorDashboard flashMessage={flashMessage} base_url={base_url}/>}/>
-        <Route path='/nursedashboard' element={<NurseDashboard flashMessage={flashMessage} base_url={base_url}/>}/>
+        <Route path='/dashboard' element={<Dashboard flashMessage={flashMessage} base_url={base_url} expressBackend={expressBackend} loggedIn={loggedIn}/>}/>
+        <Route path='/admindashboard' element={<AdminDashboard flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
+        <Route path='/doctordashboard' element={<DoctorDashboard flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
+        <Route path='/nursedashboard' element={<NurseDashboard flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>
         <Route path='/viewaccount' element={<ViewAccount base_url={base_url} loggedIn={loggedIn} flashMessage={flashMessage} logout={logout}/>}/>
         <Route path='/viewaccount/:personId' element={<ViewUser base_url={base_url} loggedIn={loggedIn} flashMessage={flashMessage} logout={logout}/>}/>
         <Route path='/updateprofile/:person_id' element={<UpdateProfile flashMessage={flashMessage} base_url={base_url} loggedIn={loggedIn}/>}/>

@@ -33,20 +33,24 @@ export default function Dashboard(props) {
             </header>
 
             <div className="d-flex flex-wrap justify-content-between w3-row-padding w3-margin-bottom">
-                <div className="col-3 m-3">
-                <div className="w3-container w3-red w3-padding-16">
-                    <div className="w3-left"><i className="fa-regular fa-calendar-check w3-xxxlarge"></i></div>
-                    <div className="w3-right">
-                    <h1>{data? data.total_appointment : null}</h1>
-                    </div>
-                    <div className="w3-clear"></div>
-                    <h5>Total Number of Appointments</h5>
-                </div>
+                <div className='mt-4 me-3'>
+                <LineChartDraw visit={data}/>
                 </div>
                 <Weather base_url={props.base_url} expressBackend={props.expressBackend} loggedIn={props.loggedIn} flashMessage={props.flashMessage}/>
-                {data.visit_statistics? <LineChartDraw visit={data} /> :null}
             </div>
-
+            <div className="d-flex flex-wrap justify-content-between w3-row-padding w3-margin-bottom">
+                <div className="col-3 m-3 ms-5">
+                    <div className="w3-container w3-red w3-padding-16">
+                        <div className="w3-left"><i className="fa-regular fa-calendar-check w3-xxxlarge"></i></div>
+                        <div className="w3-right">
+                        <h1>{data? data.total_appointment : null}</h1>
+                        </div>
+                        <div className="w3-clear"></div>
+                        <h5>Total Number of Appointments</h5>
+                    </div>
+                </div>
+            </div>
+                
 
         </div>
             

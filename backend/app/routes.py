@@ -104,7 +104,7 @@ def get_statistics():
     for a in appintments:
         visit = Visit.query.filter(Visit.appointment_id==a.appointment_id).first()
         if visit:
-            app_statistics.append({"date":a.appointment_date.strftime("%m/%d/%Y"), "visit":visit.to_dict() if visit else ""})
+            app_statistics.append({"date":a.appointment_date.strftime("%m/%d/%y"), "visit":visit.to_dict() if visit else ""})
 
     return jsonify({'total_appointment':total_appointment, 'visit_statistics':app_statistics})
 

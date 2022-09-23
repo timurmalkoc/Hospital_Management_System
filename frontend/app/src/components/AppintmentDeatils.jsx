@@ -37,13 +37,14 @@ export default function AppointmentDetails(props) {
                 headers: myHeaders
             })
             .then(res => res.json())
-            .then(user => setData(user))
+            // sorted dict for appointment
+            .then(user => setData(user.sort((f,s) => Date.parse(s.appointment.appointment_date) - Date.parse(f.appointment.appointment_date))))
             .catch(() =>
                 props.flashMessage('Encountered an issue, Please try again !', 'danger'))
         }, [])
 
 
-        const tableHeaders = ['Appointment Id', 'Doctor Name', 'Reason','Date','Time']
+        const tableHeaders = ['No', 'Doctor Name', 'Reason','Date','Time']
         const subHeaders =['Weight', 'Height', 'Temperature', 'Diagnose', 'Advice', 'Medicine', 'Dosage']
     return(
         <>
@@ -61,7 +62,7 @@ export default function AppointmentDetails(props) {
                      moment(new Date(appointment.appointment.appointment_date)).add(moment.duration(4, 'hours')) < currentDate.getTime() && appointment.appointment.status?
                      <>
                         <tr key={idx} onClick={() => details(appointment.appointment.appointment_id)}>
-                            <td>{appointment.appointment.appointment_id}</td>
+                            <td>{idx+1}</td>
                             <td>{appointment.appointment.doctor.personal.first_name+" "+appointment.appointment.doctor.personal.last_name}</td>
                             <td>{appointment.appointment.reason}</td>
                             <td>{moment(new Date(appointment.appointment.appointment_date)).add(moment.duration(4, 'hours')).format("MM-DD-YY")}</td>

@@ -10,12 +10,14 @@ export default function LineChartDraw(props) {
       for(let i = 0; i<props.visit.visit_statistics.length; i++){
         let d = {
           year  :props.visit.visit_statistics[i]["date"],
-          weight:props.visit.visit_statistics[i]["visit"]["height"],
-          height:props.visit.visit_statistics[i]["visit"]["weight"] 
+          weight:props.visit.visit_statistics[i]["visit"]["weight"],
+          height:props.visit.visit_statistics[i]["visit"]["height"],
+          temp:props.visit.visit_statistics[i]["visit"]["temp"] 
         }
         info.push(d)
       }
-      setData(info) 
+      // sorting by date
+      setData(info.sort((f,s) => Date.parse(f.year) - Date.parse(s.year))) 
       console.log(data)
     }
     }, [props.visit.visit_statistics])
@@ -28,7 +30,8 @@ export default function LineChartDraw(props) {
           <Tooltip />
           <Legend />
           <Line type="monotone" dataKey="weight" stroke="#8884d8" />
-          <Line type="monotone" dataKey="height" stroke="#82ca9d" />
+          <Line type="monotone" dataKey="height" stroke="#82889d" />
+          <Line type="monotone" dataKey="temp" stroke="#72224d" />
         </LineChart>
     )
 }

@@ -29,7 +29,7 @@ export default function LineChartDraw(props) {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Line type="monotone" dataKey="weight" stroke="#8884d8" />
+          <Line type="monotone" dataKey="weight" stroke="#8884d8" activeDot={{ r: 8 }} />
           <Line type="monotone" dataKey="height" stroke="#82889d" />
           <Line type="monotone" dataKey="temp" stroke="#72224d" />
         </LineChart>
